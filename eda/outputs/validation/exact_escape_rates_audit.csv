@@ -1,0 +1,5 @@
+hour,drifting_total,drifting_in_norm_0h_3s,drifting_norm_0h_escape_pct,drifting_in_all_0h_3s,drifting_all_0h_escape_pct,anomalous_in_norm_0h_3s,anomalous_norm_0h_escape_pct
+0h,2000,1965,98.25,1963,98.15,985,98.5
+24h,2000,1959,97.95,1957,97.85000000000001,954,95.39999999999999
+96h,2000,1913,95.65,1906,95.3,405,40.5
+168h,2000,1632,81.6,1620,81.0,57,5.7

@@ -1,0 +1,28 @@
+Column,Data Type,Missing Count,Missing Pct (%),Assigned Role,Leakage Risk
+component_id,str,0,0.0,Identifier (Do NOT use in model),No
+iddq_uA_0h,float64,149,1.49,0h Feature (Pre-burn-in Baseline),Safe for all screening gates
+iddq_uA_24h,float64,144,1.44,24h Feature (Early screening),"Safe for 24h, 96h, 168h gates"
+iddq_uA_96h,float64,147,1.47,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate
+iddq_uA_168h,float64,149,1.49,168h Feature (End of test),LEAKAGE if predicting at 24h or 96h screening gates
+leakage_current_uA_0h,float64,147,1.47,0h Feature (Pre-burn-in Baseline),Safe for all screening gates
+leakage_current_uA_24h,float64,158,1.58,24h Feature (Early screening),"Safe for 24h, 96h, 168h gates"
+leakage_current_uA_96h,float64,146,1.46,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate
+leakage_current_uA_168h,float64,169,1.69,168h Feature (End of test),LEAKAGE if predicting at 24h or 96h screening gates
+propagation_delay_ns_0h,float64,122,1.22,0h Feature (Pre-burn-in Baseline),Safe for all screening gates
+propagation_delay_ns_24h,float64,147,1.47,24h Feature (Early screening),"Safe for 24h, 96h, 168h gates"
+propagation_delay_ns_96h,float64,162,1.62,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate
+propagation_delay_ns_168h,float64,158,1.58,168h Feature (End of test),LEAKAGE if predicting at 24h or 96h screening gates
+voltage_V_0h,float64,154,1.54,0h Feature (Pre-burn-in Baseline),Safe for all screening gates
+voltage_V_24h,float64,150,1.5,24h Feature (Early screening),"Safe for 24h, 96h, 168h gates"
+voltage_V_96h,float64,162,1.62,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate
+voltage_V_168h,float64,143,1.43,168h Feature (End of test),LEAKAGE if predicting at 24h or 96h screening gates
+temperature_C_0h,float64,170,1.7,0h Feature (Pre-burn-in Baseline),Safe for all screening gates
+temperature_C_24h,float64,150,1.5,24h Feature (Early screening),"Safe for 24h, 96h, 168h gates"
+temperature_C_96h,float64,138,1.38,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate
+temperature_C_168h,float64,134,1.34,168h Feature (End of test),LEAKAGE if predicting at 24h or 96h screening gates
+module_a_label,int64,0,0.0,Target / Label (Supervised target y),CRITICAL: Must NOT be an input feature X
+iddq_drift_168h_true,float64,0,0.0,Target / Label (Supervised target y),CRITICAL: Must NOT be an input feature X
+iddq_drift_24h_pct,float64,289,2.89,24h Feature (Early screening),"Safe for 24h, 96h, 168h gates"
+iddq_drift_96h_pct,float64,294,2.94,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate
+leakage_drift_96h_pct,float64,289,2.89,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate
+delay_drift_96h_pct,float64,282,2.82,96h Feature (Mid test),LEAKAGE if predicting at 24h screening gate

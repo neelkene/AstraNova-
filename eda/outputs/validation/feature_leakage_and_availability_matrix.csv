@@ -1,0 +1,28 @@
+feature,source,available_at_24h,available_at_96h,uses_168h,leakage_risk
+component_id,Metadata Identifier,Yes (Metadata),Yes (Metadata),No,EXCLUDE (ID artifact)
+iddq_uA_0h,0h Pre-burn-in measurement,Yes,Yes,No,None (Safe for all models)
+iddq_uA_24h,24h Early burn-in measurement,Yes,Yes,No,"None (Safe for 24h, 96h, 168h)"
+iddq_uA_96h,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model
+iddq_uA_168h,168h End burn-in measurement,NO (Future),NO (Future),Yes,TEMPORAL LEAKAGE if used in 24h or 96h model
+leakage_current_uA_0h,0h Pre-burn-in measurement,Yes,Yes,No,None (Safe for all models)
+leakage_current_uA_24h,24h Early burn-in measurement,Yes,Yes,No,"None (Safe for 24h, 96h, 168h)"
+leakage_current_uA_96h,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model
+leakage_current_uA_168h,168h End burn-in measurement,NO (Future),NO (Future),Yes,TEMPORAL LEAKAGE if used in 24h or 96h model
+propagation_delay_ns_0h,0h Pre-burn-in measurement,Yes,Yes,No,None (Safe for all models)
+propagation_delay_ns_24h,24h Early burn-in measurement,Yes,Yes,No,"None (Safe for 24h, 96h, 168h)"
+propagation_delay_ns_96h,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model
+propagation_delay_ns_168h,168h End burn-in measurement,NO (Future),NO (Future),Yes,TEMPORAL LEAKAGE if used in 24h or 96h model
+voltage_V_0h,0h Pre-burn-in measurement,Yes,Yes,No,None (Safe for all models)
+voltage_V_24h,24h Early burn-in measurement,Yes,Yes,No,"None (Safe for 24h, 96h, 168h)"
+voltage_V_96h,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model
+voltage_V_168h,168h End burn-in measurement,NO (Future),NO (Future),Yes,TEMPORAL LEAKAGE if used in 24h or 96h model
+temperature_C_0h,0h Pre-burn-in measurement,Yes,Yes,No,None (Safe for all models)
+temperature_C_24h,24h Early burn-in measurement,Yes,Yes,No,"None (Safe for 24h, 96h, 168h)"
+temperature_C_96h,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model
+temperature_C_168h,168h End burn-in measurement,NO (Future),NO (Future),Yes,TEMPORAL LEAKAGE if used in 24h or 96h model
+module_a_label,Ground Truth / Evaluation Target,TARGET ONLY,TARGET ONLY,Yes (168h final outcome),CRITICAL TARGET LEAKAGE if used in X
+iddq_drift_168h_true,Ground Truth / Evaluation Target,TARGET ONLY,TARGET ONLY,Yes (168h final outcome),CRITICAL TARGET LEAKAGE if used in X
+iddq_drift_24h_pct,24h Early burn-in measurement,Yes,Yes,No,"None (Safe for 24h, 96h, 168h)"
+iddq_drift_96h_pct,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model
+leakage_drift_96h_pct,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model
+delay_drift_96h_pct,96h Mid burn-in measurement,NO (Future),Yes,No,TEMPORAL LEAKAGE if used in 24h model

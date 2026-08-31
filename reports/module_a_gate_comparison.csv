@@ -1,0 +1,8 @@
+Metric,A24 (24h Gate),A96 (96h Gate),Improvement (A96 vs A24)
+Accuracy,82.40%,97.67%,+15.27%
+Precision (Class 1),69.46%,98.14%,+28.69%
+Recall (Class 1) [Primary],73.78%,94.00%,+20.22%
+F1-Score,0.7155,0.9603,+0.2448
+False Negative Rate (Defect Escape),26.22%,6.00%,-20.22%
+False Positive Rate (False Alarms),13.90%,0.76%,-13.14%
+ROC-AUC,0.8719,0.9944,+0.1224

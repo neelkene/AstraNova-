@@ -1,0 +1,5 @@
+Time Point,Drifting Components Count,Components Inside Nominal Static Limit,Escape Rate (%),Screening Verdict
+0h (Initial),2000,1965,98.25,Static Screening FAILS (100% escape)
+24h (Early Burn-In),2000,1959,97.95,Static Screening FAILS (>90% escape)
+96h (Mid Burn-In),2000,1913,95.65,Partial static escape without AI drift
+168h (Final Burn-In),2000,1632,81.6,Final status (severely degraded)

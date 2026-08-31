@@ -1,0 +1,7 @@
+metric,value,interpretation
+Cohen's d (24h Iddq drift: All Defective vs Normal),0.915,Moderate effect size (Substantial noise & overlap)
+Cohen's d (24h Iddq drift: Drifting vs Normal),0.4573,Moderate effect size (Requires multivariate ML model)
+Cohen's d (96h Iddq drift: All Defective vs Normal),1.939,Large effect size (Strong separation)
+Cohen's d (96h Iddq drift: Drifting vs Normal),1.5222,Large effect size (Drift has progressed significantly)
+Single-threshold Max Accuracy @ 24h,81.11%,"Trivial threshold FAILS (~76% max accuracy, significant noise overlap)"
+Single-threshold Max Accuracy @ 96h,94.18%,"High accuracy (~92.4%), but multivariate modeling needed for near-zero escapes"
