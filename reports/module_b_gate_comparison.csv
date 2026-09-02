@@ -1,0 +1,6 @@
+Metric,B24 (24h Gate),B96 (96h Gate),Improvement (B96 vs B24)
+Root Mean Squared Error (RMSE),4.033%,1.415%,-2.618% (64.9% relative reduction)
+Mean Absolute Error (MAE),2.721%,0.877%,-1.843% (67.8% relative reduction)
+Coefficient of Determination (R²),0.7890,0.9740,+0.1851
+Mean Actual Degradation,5.50%,5.50%,Baseline Truth
+Mean Forecasted Degradation,5.65%,5.41%,High calibration fidelity

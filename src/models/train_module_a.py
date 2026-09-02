@@ -57,6 +57,34 @@ def get_candidate_models(random_state: int = 42) -> Dict[str, Dict[str, Any]]:
     }
 
 
+get_module_a_models = get_candidate_models
+
+
+def prepare_module_a_experiment(
+    train_df: pd.DataFrame,
+    val_df: pd.DataFrame,
+    test_df: pd.DataFrame,
+    gate: str = '24h'
+) -> Dict[str, Any]:
+    """
+    Prepares X and y splits for Module A at specified gate ('24h' for A24, '96h' for A96).
+    """
+    exp_name = f"A{gate.replace('h', '')}"
+    X_train, y_train = extract_features_and_target(train_df, exp_name)
+    X_val, y_val = extract_features_and_target(val_df, exp_name)
+    X_test, y_test = extract_features_and_target(test_df, exp_name)
+    
+    return {
+        "experiment": exp_name,
+        "gate": gate,
+        "feature_names": list(X_train.columns),
+        "target_name": y_train.name,
+        "X_train": X_train, "y_train": y_train,
+        "X_val": X_val, "y_val": y_val,
+        "X_test": X_test, "y_test": y_test
+    }
+
+
 def train_and_evaluate_gate(
     train_df: pd.DataFrame,
     val_df: pd.DataFrame,
