@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Driven Component Burn-In Screening | SIH 2026</title>
+    <meta name="description" content="AI-driven early anomaly detection and 168h degradation forecasting in semiconductor component burn-in screening.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-inner">
+                <div class="brand-section">
+                    <span class="brand-logo-badge">SIH 2026</span>
+                    <div>
+                        <h1 class="brand-title">AI-Driven Burn-In Screening</h1>
+                        <p class="brand-subtitle">Temporal anomaly detection and 168h degradation forecasting</p>
+                    </div>
+                </div>
+                
+                <nav class="header-nav" aria-label="Dashboard Navigation">
+                    <button class="nav-tab-btn active" data-view="view-overview">
+                        <span>📊</span> Overview Dashboard
+                    </button>
+                    <button class="nav-tab-btn" data-view="view-demo">
+                        <span>⚡</span> Live Component Tester
+                    </button>
+                    <button class="nav-tab-btn" data-view="view-performance">
+                        <span>📈</span> Model Performance & Judge Q&A
+                    </button>
+                    <button class="nav-tab-btn" data-view="view-architecture">
+                        <span>🛡️</span> Architecture & Leakage Protection
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- ================================================================
+                 VIEW 1: OVERVIEW DASHBOARD
+                 ================================================================ -->
+            <section id="view-overview" class="view-panel active">
+                
+                <!-- Section 1: Burn-In Workflow -->
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>🔄</span> Section 1 — Burn-In Screening Workflow
+                    </h2>
+                    <p class="section-desc">2-Stage sequential decision policy: triage obvious defects at 24h, qualify high-reliability components at 96h.</p>
+                </div>
+
+                <div class="workflow-container">
+                    
+                    <!-- Step 0 -->
+                    <div class="workflow-step-card">
+                        <div class="workflow-step-header">
+                            <span class="workflow-step-num">0</span>
+                            <span class="badge badge-blue">Pre-Burn-In</span>
+                        </div>
+                        <h3 class="workflow-step-title">0h Baseline Inspection</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                            Initial static ATE parametric check ($I_{DDQ}$, leakage, delay, voltage, temp).
+                        </p>
+                        <div style="margin-top: 1rem; padding: 0.5rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.75rem; color: var(--text-muted);">
+                            ⚠️ <strong>Static Screening Failure:</strong> 98.25% of drifting parts pass nominal $3\sigma$ limits at 0h.
+                        </div>
+                    </div>
+
+                    <div class="workflow-arrow">→</div>
+
+                    <!-- Step 1: 24h Gate -->
+                    <div class="workflow-step-card active-gate">
+                        <div class="workflow-step-header">
+                            <span class="workflow-step-num">1</span>
+                            <span class="badge badge-blue">Early Gate</span>
+                        </div>
+                        <h3 class="workflow-step-title">24h Early Screening</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                            Module A (A24) + Module B (B24) evaluate 11 temporal features.
+                        </p>
+                        <div class="workflow-decisions-list">
+                            <div class="workflow-decision-item">
+                                <span>PASS</span>
+                                <span class="badge badge-pass">Early Release</span>
+                            </div>
+                            <div class="workflow-decision-item">
+                                <span>REJECT</span>
+                                <span class="badge badge-reject">Early Eject</span>
+                            </div>
+                            <div class="workflow-decision-item">
+                                <span>REVIEW</span>
+                                <span class="badge badge-review">Continue to 96h</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-arrow">→</div>
+
+                    <!-- Step 2: 96h Gate -->
+                    <div class="workflow-step-card active-gate">
+                        <div class="workflow-step-header">
+                            <span class="workflow-step-num">2</span>
+                            <span class="badge badge-teal">Mid Gate</span>
+                        </div>
+                        <h3 class="workflow-step-title">96h Final Qualification</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                            Module A (A96) + Module B (B96) evaluate 19 multi-point features.
+                        </p>
+                        <div class="workflow-decisions-list">
+                            <div class="workflow-decision-item">
+                                <span>PASS</span>
+                                <span class="badge badge-pass">Production Release</span>
+                            </div>
+                            <div class="workflow-decision-item">
+                                <span>REJECT</span>
+                                <span class="badge badge-reject">Scrap Component</span>
+                            </div>
+                            <div class="workflow-decision-item">
+                                <span>REVIEW</span>
+                                <span class="badge badge-review">Manual Bench Review</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-arrow">→</div>
+
+                    <!-- Final Yield -->
+                    <div class="workflow-step-card">
+                        <div class="workflow-step-header">
+                            <span class="workflow-step-num">✓</span>
+                            <span class="badge badge-pass">Qualified</span>
+                        </div>
+                        <h3 class="workflow-step-title">High-Reliability Release</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem;">
+                            Components deployed to mission-critical automotive and aerospace systems.
+                        </p>
+                        <div style="margin-top: 1rem; padding: 0.5rem; background: #f0fdf4; border-radius: var(--radius-sm); font-size: 0.75rem; color: #166534;">
+                            🚀 <strong>64.1% Net Chamber Time Saved</strong> vs standard 168h test.
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sections 2 & 3: Module A and Module B Overview Cards -->
+                <div class="grid-2" style="margin-bottom: 2rem;">
+                    
+                    <!-- Module A Card -->
+                    <div class="card">
+                        <div class="module-card-header">
+                            <div>
+                                <h3 class="module-title">Section 2 — Module A: Defect Classification</h3>
+                                <p class="module-subtitle">Detects drifting/anomalous components (<code style="font-family: monospace;">module_a_label</code>)</p>
+                            </div>
+                            <span class="badge badge-blue">Locked Test Results</span>
+                        </div>
+
+                        <div class="comparison-box">
+                            <div class="gate-subcard">
+                                <div class="gate-badge-title">24h Early Gate (A24)</div>
+                                <div class="model-name-pill">Logistic Regression</div>
+                                <div class="metric-row"><span class="metric-label">Features:</span><span class="metric-val">11 features</span></div>
+                                <div class="metric-row"><span class="metric-label">Recall (Class 1):</span><span class="metric-val">73.78%</span></div>
+                                <div class="metric-row"><span class="metric-label">Defect Escape (FNR):</span><span class="metric-val">26.22%</span></div>
+                                <div class="metric-row"><span class="metric-label">Precision:</span><span class="metric-val">69.46%</span></div>
+                                <div class="metric-row"><span class="metric-label">ROC-AUC:</span><span class="metric-val">0.8719</span></div>
+                            </div>
+
+                            <div class="gate-subcard">
+                                <div class="gate-badge-title">96h Mid Gate (A96)</div>
+                                <div class="model-name-pill">Random Forest</div>
+                                <div class="metric-row"><span class="metric-label">Features:</span><span class="metric-val">19 features</span></div>
+                                <div class="metric-row"><span class="metric-label">Recall (Class 1):</span><span class="metric-val metric-highlight">94.00%</span></div>
+                                <div class="metric-row"><span class="metric-label">Defect Escape (FNR):</span><span class="metric-val metric-highlight">6.00%</span></div>
+                                <div class="metric-row"><span class="metric-label">Precision:</span><span class="metric-val">98.14%</span></div>
+                                <div class="metric-row"><span class="metric-label">ROC-AUC:</span><span class="metric-val metric-highlight">0.9944</span></div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-banner">
+                            <span class="highlight-text">Defect Escape Rate Reduction (A24 → A96):</span>
+                            <span class="highlight-delta">26.22% → 6.00% (-77.1% relative)</span>
+                        </div>
+                    </div>
+
+                    <!-- Module B Card -->
+                    <div class="card">
+                        <div class="module-card-header">
+                            <div>
+                                <h3 class="module-title">Section 3 — Module B: 168h Degradation Forecast</h3>
+                                <p class="module-subtitle">Predicts final 168h Iddq drift percentage (<code style="font-family: monospace;">iddq_drift_168h_true</code>)</p>
+                            </div>
+                            <span class="badge badge-teal">Locked Test Results</span>
+                        </div>
+
+                        <div class="comparison-box">
+                            <div class="gate-subcard">
+                                <div class="gate-badge-title">24h Early Gate (B24)</div>
+                                <div class="model-name-pill">Gradient Boosting</div>
+                                <div class="metric-row"><span class="metric-label">Features:</span><span class="metric-val">11 features</span></div>
+                                <div class="metric-row"><span class="metric-label">RMSE:</span><span class="metric-val">4.033%</span></div>
+                                <div class="metric-row"><span class="metric-label">MAE:</span><span class="metric-val">2.721%</span></div>
+                                <div class="metric-row"><span class="metric-label">R² Score:</span><span class="metric-val">0.7890</span></div>
+                                <div class="metric-row"><span class="metric-label">Causality:</span><span class="metric-val">0h+24h only</span></div>
+                            </div>
+
+                            <div class="gate-subcard">
+                                <div class="gate-badge-title">96h Mid Gate (B96)</div>
+                                <div class="model-name-pill">Random Forest Regressor</div>
+                                <div class="metric-row"><span class="metric-label">Features:</span><span class="metric-val">19 features</span></div>
+                                <div class="metric-row"><span class="metric-label">RMSE:</span><span class="metric-val metric-highlight">1.415%</span></div>
+                                <div class="metric-row"><span class="metric-label">MAE:</span><span class="metric-val metric-highlight">0.877%</span></div>
+                                <div class="metric-row"><span class="metric-label">R² Score:</span><span class="metric-val metric-highlight">0.9740</span></div>
+                                <div class="metric-row"><span class="metric-label">Causality:</span><span class="metric-val">0h+24h+96h only</span></div>
+                            </div>
+                        </div>
+
+                        <div class="highlight-banner" style="background: #f0fdfa; border-color: #99f6e4;">
+                            <span class="highlight-text" style="color: #0f766e;">Forecast Error & Variance Improvement:</span>
+                            <span class="highlight-delta" style="color: #0d9488;">RMSE: 4.03% → 1.42% | R²: 0.789 → 0.974</span>
+                        </div>
+                        
+                        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.75rem; font-style: italic;">
+                            * The target is the true 168h Iddq drift. 168h sensor measurements are NEVER used as input features.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Sections 4 & 5: Judge Explanation & Leakage Protection -->
+                <div class="grid-2">
+                    
+                    <!-- Section 4: Why These Models? -->
+                    <div class="card">
+                        <h3 class="section-title" style="font-size: 1.1rem; margin-bottom: 0.75rem;">
+                            <span>⚖️</span> Section 4 — Why These Models? (Judge Explanation)
+                        </h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                            Every production model was selected strictly based on measured validation set performance within our predefined candidate suite:
+                        </p>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.84rem;">
+                            <div style="padding: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid var(--brand-blue);">
+                                <strong>Module A @ 24h: Logistic Regression (Balanced)</strong><br>
+                                <span style="color: var(--text-muted);">Selected for highest Class 1 Recall (70.0% Val) and lowest FNR (30.0% Val) under early noisy sensor conditions.</span>
+                            </div>
+                            <div style="padding: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid var(--brand-blue);">
+                                <strong>Module A @ 96h: Random Forest Classifier</strong><br>
+                                <span style="color: var(--text-muted);">Selected for superior non-linear separation (95.56% Val Recall, 0.9953 Val ROC-AUC) on multi-point drift metrics.</span>
+                            </div>
+                            <div style="padding: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid var(--brand-teal);">
+                                <strong>Module B @ 24h: Gradient Boosting Regressor</strong><br>
+                                <span style="color: var(--text-muted);">Selected for lowest validation RMSE (0.0416) and best noise resilience over linear baselines ($R^2 = 0.768$ vs $0.380$).</span>
+                            </div>
+                            <div style="padding: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid var(--brand-teal);">
+                                <strong>Module B @ 96h: Random Forest Regressor</strong><br>
+                                <span style="color: var(--text-muted);">Selected for lowest validation RMSE (0.0133) and highest explanation of physical degradation variance ($R^2 = 0.976$).</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Temporal Leakage Protection -->
+                    <div class="card">
+                        <h3 class="section-title" style="font-size: 1.1rem; margin-bottom: 0.75rem;">
+                            <span>🛡️</span> Section 5 — Temporal Leakage Protection
+                        </h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                            Strict physical and temporal safeguards prevent future contamination and data snooping:
+                        </p>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.84rem;">
+                            <div style="padding: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                                <strong>24h Screening Gate:</strong> Uses ONLY 0h + 24h measurements (11 features). 96h and 168h data are strictly excluded.
+                            </div>
+                            <div style="padding: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                                <strong>96h Screening Gate:</strong> Uses ONLY 0h + 24h + 96h measurements (19 features). 168h data is strictly excluded.
+                            </div>
+                            <div style="padding: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                                <strong>Target Isolation:</strong> Ground truth labels (<code style="font-family: monospace;">module_a_label</code>, <code style="font-family: monospace;">iddq_drift_168h_true</code>) are isolated to $y$. Never in $X$.
+                            </div>
+                            <div style="padding: 0.6rem; background: #eff6ff; border-radius: var(--radius-sm); border: 1px solid #bfdbfe;">
+                                <strong>Component-Level Partition:</strong> 7,000 Train / 1,500 Val / 1,500 Test with <strong>ZERO component ID overlap</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================================
+                 VIEW 2: LIVE COMPONENT TESTER (JUDGE DEMONSTRATION)
+                 ================================================================ -->
+            <section id="view-demo" class="view-panel">
+                
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>⚡</span> Live Burn-In Screening on Genuine Test Components
+                    </h2>
+                    <p class="section-desc">Test real semiconductor components from the locked evaluation dataset using our production ML pipelines.</p>
+                </div>
+
+                <div class="demo-layout">
+                    
+                    <!-- Left Sidebar: Component Selector -->
+                    <aside class="component-selector-panel">
+                        <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.65rem;">Select Locked Test Component</h3>
+                        
+                        <!-- Quick Presets -->
+                        <div class="preset-shortcuts">
+                            <div class="preset-title">Judge Quick Presets</div>
+                            <div class="preset-btns-grid">
+                                <button class="preset-item-btn" data-id="SYN_C01216">
+                                    <span>🟢 <strong>SYN_C01216</strong></span>
+                                    <span style="font-size: 0.7rem; color: var(--status-pass);">Healthy Normal</span>
+                                </button>
+                                <button class="preset-item-btn" data-id="SYN_C01252">
+                                    <span>🟡 <strong>SYN_C01252</strong></span>
+                                    <span style="font-size: 0.7rem; color: var(--status-review);">Latent Drifting</span>
+                                </button>
+                                <button class="preset-item-btn" data-id="SYN_C04946">
+                                    <span>🔴 <strong>SYN_C04946</strong></span>
+                                    <span style="font-size: 0.7rem; color: var(--status-reject);">Gross Anomalous</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Filter Pills -->
+                        <div class="filter-pills">
+                            <button class="filter-btn active" data-filter="all">All (1,500)</button>
+                            <button class="filter-btn" data-filter="normal">Normal</button>
+                            <button class="filter-btn" data-filter="drifting">Drifting</button>
+                            <button class="filter-btn" data-filter="anomalous">Anomalous</button>
+                        </div>
+
+                        <!-- Search -->
+                        <input type="text" id="comp-search-input" placeholder="Search by ID (e.g. SYN_C...)" 
+                               style="width: 100%; padding: 0.4rem 0.6rem; font-size: 0.8rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin-bottom: 0.5rem;">
+
+                        <!-- Component List -->
+                        <div id="component-scroll-list" class="component-scroll-list">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </aside>
+
+                    <!-- Right Main Area: Sensor Readout & Screening Pipeline -->
+                    <div class="screening-action-area">
+                        
+                        <!-- Sensor Readout Card -->
+                        <div class="sensor-readout-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <h3 id="current-comp-title" style="font-size: 1.25rem; font-weight: 800; font-family: 'JetBrains Mono', monospace;">SYN_C01216</h3>
+                                    <span id="current-comp-gt-badge" class="badge badge-pass">Ground Truth: Healthy (Class 0)</span>
+                                </div>
+                                <span id="current-comp-gt-drift" style="font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-muted);">
+                                    True 168h Drift: +1.98%
+                                </span>
+                            </div>
+
+                            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                                Genuine sensor measurements retrieved from <code style="font-family: monospace;">data/ml_ready/ml_features.csv</code>:
+                            </p>
+
+                            <!-- Sensor Table -->
+                            <div style="overflow-x: auto;">
+                                <table class="sensor-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Physical Sensor Channel</th>
+                                            <th>0h Baseline</th>
+                                            <th>24h Stress</th>
+                                            <th>96h Stress</th>
+                                            <th>168h Ground Truth</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>$I_{DDQ}$ (Quiescent Current)</strong></td>
+                                            <td id="val-iddq-0h">98.42 µA</td>
+                                            <td id="val-iddq-24h">99.14 µA</td>
+                                            <td id="val-iddq-96h">99.82 µA</td>
+                                            <td style="color: var(--text-muted); font-style: italic;">Evaluation only</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>$I_{leak}$ (Subthreshold Leakage)</strong></td>
+                                            <td id="val-leak-0h">49.80 µA</td>
+                                            <td id="val-leak-24h">50.21 µA</td>
+                                            <td id="val-leak-96h">50.92 µA</td>
+                                            <td style="color: var(--text-muted); font-style: italic;">Evaluation only</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>$t_{pd}$ (Propagation Delay)</strong></td>
+                                            <td id="val-delay-0h">10.05 ns</td>
+                                            <td id="val-delay-24h">10.08 ns</td>
+                                            <td id="val-delay-96h">10.12 ns</td>
+                                            <td style="color: var(--text-muted); font-style: italic;">Evaluation only</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Supply Voltage ($V_{DD}$)</strong></td>
+                                            <td id="val-volt-0h">1.201 V</td>
+                                            <td id="val-volt-24h">1.198 V</td>
+                                            <td id="val-volt-96h">1.202 V</td>
+                                            <td style="color: var(--text-muted); font-style: italic;">Evaluation only</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Chamber Temperature</strong></td>
+                                            <td id="val-temp-0h">125.1 °C</td>
+                                            <td id="val-temp-24h">124.9 °C</td>
+                                            <td id="val-temp-96h">125.0 °C</td>
+                                            <td style="color: var(--text-muted); font-style: italic;">Evaluation only</td>
+                                        </tr>
+                                        <tr style="background: var(--bg-surface-subtle);">
+                                            <td><strong>Calculated $I_{DDQ}$ Drift (%)</strong></td>
+                                            <td>—</td>
+                                            <td id="val-drift-24h" style="font-weight: 700; color: var(--brand-blue);">+0.73%</td>
+                                            <td id="val-drift-96h" style="font-weight: 700; color: var(--brand-teal);">+1.42%</td>
+                                            <td style="font-weight: 700;">+1.98%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Action Controls -->
+                        <div class="action-controls-bar">
+                            <button id="btn-run-24h" class="btn-primary">
+                                <span>⚡</span> Run 24h Early Screening
+                            </button>
+                            <button id="btn-run-96h" class="btn-primary" style="background: var(--brand-teal);">
+                                <span>⏱️</span> Run 96h Qualification
+                            </button>
+                            <button id="btn-run-seq" class="btn-secondary">
+                                <span>🔄</span> Execute 2-Stage Sequential Workflow
+                            </button>
+                        </div>
+
+                        <!-- Single Gate Inference Result Container -->
+                        <div id="inference-results-container" style="display: none;">
+                            <div id="decision-card" class="decision-result-card PASS">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                        <span id="decision-badge-result" class="decision-badge-large badge-pass">PASS</span>
+                                        <span id="decision-gate-tag" style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted);">24h Screening Gate</span>
+                                    </div>
+                                    <span id="decision-features-count" style="font-size: 0.8rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
+                                        11 features used
+                                    </span>
+                                </div>
+
+                                <!-- Dual Metrics -->
+                                <div class="metrics-gauge-grid">
+                                    <div class="gauge-box">
+                                        <div class="gauge-title">Module A: Defect Probability</div>
+                                        <div id="decision-prob-val" class="gauge-number" style="color: var(--brand-blue);">38.4%</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Model: <strong id="decision-model-a-name">LogisticRegression</strong></div>
+                                    </div>
+
+                                    <div class="gauge-box">
+                                        <div class="gauge-title">Module B: Projected 168h Drift</div>
+                                        <div id="decision-drift-val" class="gauge-number" style="color: var(--brand-teal);">+3.57%</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Model: <strong id="decision-model-b-name">GradientBoostingRegressor</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- Explanation & Recommendation -->
+                                <div class="reason-box">
+                                    <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem;">Automated Decision Rationale:</div>
+                                    <p id="decision-reason-text" style="color: var(--text-main); font-size: 0.88rem;"></p>
+                                </div>
+
+                                <div style="margin-top: 0.75rem; font-size: 0.85rem;">
+                                    <strong>Operational Recommendation:</strong> <span id="decision-recommendation-text"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sequential Screening Timeline Container -->
+                        <div id="sequential-timeline-container" style="display: none;">
+                            <div class="card" style="border: 1px solid var(--brand-blue);">
+                                <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>🔄</span> 2-Stage Sequential Workflow Outcome
+                                </h4>
+                                
+                                <p id="seq-final-summary" style="font-size: 0.88rem; color: var(--text-main); margin-bottom: 1rem; font-weight: 600;"></p>
+
+                                <div class="grid-2">
+                                    <!-- Stage 1 Box -->
+                                    <div style="background: var(--bg-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Stage 1: 24h Early Triage</div>
+                                        <div style="font-size: 1.25rem; font-weight: 800; margin: 0.35rem 0;" id="seq-s1-decision">REVIEW</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Defect Prob: <strong id="seq-s1-prob">38.4%</strong> | Forecast Drift: <strong id="seq-s1-drift">+3.57%</strong></div>
+                                    </div>
+
+                                    <!-- Stage 2 Box -->
+                                    <div id="seq-stage-2-box" style="background: var(--bg-surface-subtle); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+                                        <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Stage 2: 96h Final Qualification</div>
+                                        <div style="font-size: 1.25rem; font-weight: 800; margin: 0.35rem 0;" id="seq-s2-decision">PASS</div>
+                                        <div style="font-size: 0.8rem; color: var(--text-muted);">Defect Prob: <strong id="seq-s2-prob">2.5%</strong> | Forecast Drift: <strong id="seq-s2-drift">+0.97%</strong></div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 1rem; padding: 0.6rem; background: #eff6ff; border-radius: var(--radius-sm); font-size: 0.8rem; color: #1e40af;">
+                                    <strong>Final Verdict:</strong> <span id="seq-final-verdict">PASS @ 96h Gate</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================================
+                 VIEW 3: MODEL PERFORMANCE & JUDGE Q&A
+                 ================================================================ -->
+            <section id="view-performance" class="view-panel">
+                
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>📈</span> Model Performance Benchmarks & Judge Reference
+                    </h2>
+                    <p class="section-desc">Documented evaluation metrics from locked test partitions ($N=1,500$ unseen components).</p>
+                </div>
+
+                <!-- Module A Full Table -->
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Module A — Defect Classification Benchmark</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Target: <code style="font-family: monospace;">module_a_label</code> (0 = Normal, 1 = Defective). Primary metric: Defect Recall / FNR reduction.</p>
+
+                    <table class="perf-table">
+                        <thead>
+                            <tr>
+                                <th>Test Gate</th>
+                                <th>Selected Architecture</th>
+                                <th>Features</th>
+                                <th>Accuracy</th>
+                                <th>Precision</th>
+                                <th>Recall (Class 1)</th>
+                                <th>F1-Score</th>
+                                <th>Defect Escape (FNR)</th>
+                                <th>False Scrap (FPR)</th>
+                                <th>ROC-AUC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>24h Early Gate</strong></td>
+                                <td><span class="model-name-pill">LogisticRegression</span></td>
+                                <td>11 features</td>
+                                <td>82.40%</td>
+                                <td>69.46%</td>
+                                <td><strong>73.78%</strong></td>
+                                <td>0.7155</td>
+                                <td>26.22%</td>
+                                <td>13.90%</td>
+                                <td>0.8719</td>
+                            </tr>
+                            <tr style="background: #f0fdf4;">
+                                <td><strong>96h Mid Gate</strong></td>
+                                <td><span class="model-name-pill" style="color: var(--brand-teal); background: var(--brand-teal-light);">RandomForest</span></td>
+                                <td>19 features</td>
+                                <td><strong>97.67%</strong></td>
+                                <td><strong>98.14%</strong></td>
+                                <td><strong style="color: var(--status-pass);">94.00%</strong></td>
+                                <td><strong>0.9603</strong></td>
+                                <td><strong style="color: var(--status-pass);">6.00%</strong></td>
+                                <td><strong>0.76%</strong></td>
+                                <td><strong style="color: var(--status-pass);">0.9944</strong></td>
+                            </tr>
+                            <tr style="font-weight: 700; color: #15803d; background: #dcfce7;">
+                                <td colspan="3">Performance Gain (96h vs 24h)</td>
+                                <td>+15.27%</td>
+                                <td>+28.68%</td>
+                                <td>+20.22%</td>
+                                <td>+0.2448</td>
+                                <td>-20.22% (77.1% relative drop)</td>
+                                <td>-13.14% (94.5% relative drop)</td>
+                                <td>+0.1225</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Module B Full Table -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">Module B — 168h Degradation Forecasting Benchmark</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Target: <code style="font-family: monospace;">iddq_drift_168h_true</code> (Continuous percentage degradation). Primary metrics: RMSE, MAE, R².</p>
+
+                    <table class="perf-table">
+                        <thead>
+                            <tr>
+                                <th>Test Gate</th>
+                                <th>Selected Architecture</th>
+                                <th>Features</th>
+                                <th>Root Mean Squared Error (RMSE)</th>
+                                <th>Mean Absolute Error (MAE)</th>
+                                <th>Coefficient of Determination (R²)</th>
+                                <th>Mean Predicted Drift</th>
+                                <th>Mean Actual Drift</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>24h Early Gate</strong></td>
+                                <td><span class="model-name-pill">GradientBoostingRegressor</span></td>
+                                <td>11 features</td>
+                                <td>4.033% (0.0403)</td>
+                                <td>2.721% (0.0272)</td>
+                                <td>0.7890</td>
+                                <td>5.65%</td>
+                                <td>5.50%</td>
+                            </tr>
+                            <tr style="background: #f0fdfa;">
+                                <td><strong>96h Mid Gate</strong></td>
+                                <td><span class="model-name-pill" style="color: var(--brand-teal); background: var(--brand-teal-light);">RandomForestRegressor</span></td>
+                                <td>19 features</td>
+                                <td><strong style="color: var(--brand-teal);">1.415% (0.0141)</strong></td>
+                                <td><strong style="color: var(--brand-teal);">0.877% (0.0088)</strong></td>
+                                <td><strong style="color: var(--brand-teal);">0.9740</strong></td>
+                                <td>5.41%</td>
+                                <td>5.50%</td>
+                            </tr>
+                            <tr style="font-weight: 700; color: #0f766e; background: #ccfbf1;">
+                                <td colspan="3">Performance Gain (96h vs 24h)</td>
+                                <td>-2.618% (64.9% relative drop)</td>
+                                <td>-1.843% (67.8% relative drop)</td>
+                                <td>+0.1851 absolute gain</td>
+                                <td colspan="2">High Calibration Fidelity across Population</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Judge Q&A Section -->
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>💬</span> Judge Q&A Quick Reference
+                    </h2>
+                    <p class="section-desc">Concise, mathematically grounded answers to common jury defense questions.</p>
+                </div>
+
+                <div class="qa-card">
+                    <div class="qa-question"><span>❓</span> 1. What models did you use and why?</div>
+                    <div class="qa-answer">
+                        We evaluated linear models, tree bagging, and sequential gradient boosting on a strictly held-out validation set. For Module A, <strong>Logistic Regression (Balanced)</strong> was selected at 24h for optimal sensitivity under noisy conditions, and <strong>Random Forest Classifier</strong> at 96h for non-linear multi-drift separation. For Module B, <strong>Gradient Boosting Regressor</strong> was selected at 24h and <strong>Random Forest Regressor</strong> at 96h based on lowest measured validation RMSE.
+                    </div>
+                </div>
+
+                <div class="qa-card">
+                    <div class="qa-question"><span>❓</span> 2. What features enter the model at 24h vs 96h?</div>
+                    <div class="qa-answer">
+                        At <strong>24h</strong>, only 11 features are admitted (5 pre-stress 0h baselines, 5 raw 24h readings, and 24h percentage drift in $I_{DDQ}$). At <strong>96h</strong>, 19 features are admitted (all 24h features + 5 raw 96h readings + 3 multi-parameter drift rates in $I_{DDQ}$, leakage, and delay). <strong>168h measurements are NEVER used as input features</strong>.
+                    </div>
+                </div>
+
+                <div class="qa-card">
+                    <div class="qa-question"><span>❓</span> 3. Why does 96h screening significantly outperform 24h?</div>
+                    <div class="qa-answer">
+                        At 24h, latent defects have only accumulated $+1.45\%$ mean drift, overlapping heavily with thermal noise (Cohen's $d = 0.457$). By 96h ($72\text{h}$ additional stress), degradation diverges to $+5.07\%$ for drifting components and $+17.98\%$ for anomalous units (Cohen's $d = 1.522$), sharply elevating signal-to-noise ratio and boosting defect recall to $94.00\%$.
+                    </div>
+                </div>
+
+                <div class="qa-card">
+                    <div class="qa-question"><span>❓</span> 4. How did you guarantee zero target and temporal data leakage?</div>
+                    <div class="qa-answer">
+                        We enforced three structural guarantees: (1) <strong>Component-level splitting</strong> (7,000 Train / 1,500 Val / 1,500 Test) with 0 component ID overlap; (2) <strong>Gate-specific feature masking</strong> preventing 96h/168h data in early models; (3) <strong>Preprocessors</strong> (SimpleImputer and StandardScaler) fitted strictly on the Training set.
+                    </div>
+                </div>
+
+                <div class="qa-card">
+                    <div class="qa-question"><span>❓</span> 5. Are predictions based on real data or synthetic shortcuts?</div>
+                    <div class="qa-answer">
+                        All predictions come directly from serialized production models evaluated on genuine test components. Furthermore, our controlled feature ablation study proved that raw multi-point measurements natively provide $80.89\%$ recall, and engineered drift features add $13.11\%$ extra capture—confirming genuine physical degradation dynamics.
+                    </div>
+                </div>
+
+            </section>
+
+
+            <!-- ================================================================
+                 VIEW 4: ARCHITECTURE & DATA INTEGRITY
+                 ================================================================ -->
+            <section id="view-architecture" class="view-panel">
+                
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <span>🛡️</span> Architecture, Data Hygiene & Feature Availability Matrix
+                    </h2>
+                    <p class="section-desc">Complete architectural breakdown of datasets, features, and production serialization.</p>
+                </div>
+
+                <div class="grid-2" style="margin-bottom: 1.5rem;">
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Dataset Inventory & Roles</h3>
+                        <table class="perf-table">
+                            <thead>
+                                <tr>
+                                    <th>Dataset File</th>
+                                    <th>Shape</th>
+                                    <th>Role & Access Restriction</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code style="font-size: 0.8rem;">data/raw/raw_burnin_data.csv</code></td>
+                                    <td>40,000 × 8</td>
+                                    <td><strong>Immutable Raw Time-Series:</strong> 10k parts at 0h, 24h, 96h, 168h.</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="font-size: 0.8rem;">data/ground_truth/component_ground_truth.csv</code></td>
+                                    <td>10,000 × 8</td>
+                                    <td><strong>Benchmarking Only:</strong> 7k Normal, 2k Drifting, 1k Anomalous.</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="font-size: 0.8rem;">data/ml_ready/ml_features.csv</code></td>
+                                    <td>10,000 × 27</td>
+                                    <td><strong>Prepared ML Matrix:</strong> Gate-specific features and drift.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem;">Production Model Artifacts</h3>
+                        <table class="perf-table">
+                            <thead>
+                                <tr>
+                                    <th>Model File</th>
+                                    <th>Pipeline Steps</th>
+                                    <th>Input Shape</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code style="font-size: 0.8rem;">models/module_a_24h_logisticregression.joblib</code></td>
+                                    <td>Imputer → Scaler → LogisticRegression</td>
+                                    <td>11 Features</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="font-size: 0.8rem;">models/module_a_96h_randomforest.joblib</code></td>
+                                    <td>Imputer → RandomForestClassifier</td>
+                                    <td>19 Features</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="font-size: 0.8rem;">models/module_b_24h_gradientboostingregressor.joblib</code></td>
+                                    <td>Imputer → GradientBoostingRegressor</td>
+                                    <td>11 Features</td>
+                                </tr>
+                                <tr>
+                                    <td><code style="font-size: 0.8rem;">models/module_b_96h_randomforestregressor.joblib</code></td>
+                                    <td>Imputer → RandomForestRegressor</td>
+                                    <td>19 Features</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer style="background: var(--bg-surface); border-top: 1px solid var(--border-subtle); padding: 1.25rem; text-align: center; font-size: 0.8rem; color: var(--text-muted);">
+            Smart India Hackathon (SIH) 2026 — AI-Driven Anomaly Detection in Component Burn-In & Screening | Team AstraNova
+        </footer>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

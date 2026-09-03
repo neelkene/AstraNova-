@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Driven Burn-In Screening | SIH 2026</title>
+    <meta name="description" content="Predictive component reliability analysis using 24h and 96h burn-in data.">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Chart.js local bundle with CDN fallback -->
+    <script src="/static/js/chart.umd.min.js"></script>
+    <script>
+        if (typeof Chart === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"><\/script>');
+        }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- ====================================================================
+             HEADER
+             ==================================================================== -->
+        <header class="app-header">
+            <div class="header-inner">
+                <div class="brand-section">
+                    <span class="brand-logo-badge">SIH 2026</span>
+                    <div>
+                        <h1 class="brand-title">AI-Driven Burn-In Screening</h1>
+                        <p class="brand-subtitle">Predictive component reliability analysis using 24h and 96h burn-in data</p>
+                    </div>
+                </div>
+
+                <div class="header-status-strip">
+                    <div class="status-pill" id="sys-status-pill">
+                        <span class="status-indicator-dot" id="sys-status-dot"></span>
+                        <span id="sys-status-text">Connecting to backend...</span>
+                    </div>
+
+                    <div class="status-pill">
+                        <span>Component:</span>
+                        <strong id="header-comp-id" style="font-family: var(--font-mono);">SYN_C01216</strong>
+                    </div>
+
+                    <div class="status-pill">
+                        <span>Gate:</span>
+                        <strong id="header-gate-badge">96h Dual-Gate</strong>
+                    </div>
+
+                    <div class="status-pill">
+                        <span>Analyzed:</span>
+                        <span id="header-timestamp">Just now</span>
+                    </div>
+                </div>
+
+                <nav class="header-nav" aria-label="Dashboard Navigation">
+                    <button class="nav-tab-btn active" data-view="view-screening">
+                        <span>⚡</span> Live Component Screening
+                    </button>
+                    <button class="nav-tab-btn" data-view="view-dataset">
+                        <span>📊</span> Dataset Overview
+                    </button>
+                    <button class="nav-tab-btn" data-view="view-methodology">
+                        <span>🛡️</span> Model Benchmarks & Policy
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- ====================================================================
+             MAIN CONTENT AREA
+             ==================================================================== -->
+        <main class="main-content">
+
+            <!-- ================================================================
+                 VIEW 1: LIVE COMPONENT SCREENING (PRIMARY WORKFLOW)
+                 ================================================================ -->
+            <section id="view-screening" class="view-panel active">
+                
+                <div class="grid-sidebar">
+                    
+                    <!-- Sidebar: Component Selection -->
+                    <aside class="comp-selector-container">
+                        
+                        <div class="card" style="margin-bottom: 0;">
+                            <div class="card-header">
+                                <span class="card-title"><span>🔍</span> Component Selection</span>
+                                <span class="badge badge-neutral" id="comp-count-badge">Dataset</span>
+                            </div>
+                            <div class="card-body" style="padding: 1rem;">
+                                
+                                <!-- Search input -->
+                                <div class="search-box-wrap" style="margin-bottom: 0.75rem;">
+                                    <span class="search-icon">🔎</span>
+                                    <input type="text" id="comp-search-input" class="search-input" placeholder="Search ID (e.g. SYN_C01216)..." autocomplete="off" spellcheck="false">
+                                </div>
+
+                                <!-- Real Demo Presets -->
+                                <div class="preset-strip" style="margin-bottom: 0.85rem;">
+                                    <span class="preset-label">Verified Demo Presets</span>
+                                    <div class="preset-buttons">
+                                        <button class="preset-btn active" data-preset="SYN_C01216" title="Healthy normal part: qualifies at 96h with minimal drift">
+                                            Normal<br><span style="font-size: 0.68rem; font-family: var(--font-mono);">C01216</span>
+                                        </button>
+                                        <button class="preset-btn" data-preset="SYN_C01252" title="Latent drifting part: review at 24h, rejected at 96h">
+                                            Drifting<br><span style="font-size: 0.68rem; font-family: var(--font-mono);">C01252</span>
+                                        </button>
+                                        <button class="preset-btn" data-preset="SYN_C04946" title="Gross anomalous part: severe early defect, rejected at 24h">
+                                            Defect<br><span style="font-size: 0.68rem; font-family: var(--font-mono);">C04946</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Filter Buttons -->
+                                <div style="display: flex; gap: 0.35rem; margin-bottom: 0.5rem;">
+                                    <button class="filter-tab-btn active" data-filter="all" style="flex: 1; padding: 0.25rem; font-size: 0.72rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface-subtle); cursor: pointer;">All</button>
+                                    <button class="filter-tab-btn" data-filter="test" style="flex: 1; padding: 0.25rem; font-size: 0.72rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface-subtle); cursor: pointer;">Test Set (N=1500)</button>
+                                </div>
+
+                                <!-- Scrollable Real Components List -->
+                                <div class="comp-list-container" id="component-scroll-list">
+                                    <div class="empty-state" style="padding: 1.5rem 0.5rem;">
+                                        <div class="loading-spinner"></div>
+                                        <div style="font-size: 0.78rem; margin-top: 0.5rem;">Loading real component records...</div>
+                                    </div>
+                                </div>
+
+                                <!-- Load by custom ID button -->
+                                <div style="margin-top: 0.75rem; display: flex; gap: 0.4rem;">
+                                    <input type="text" id="manual-id-input" class="search-input" placeholder="Custom SYN_C..." style="padding: 0.4rem 0.6rem; font-size: 0.78rem;">
+                                    <button class="btn btn-secondary" id="btn-load-manual" style="padding: 0.4rem 0.75rem; font-size: 0.78rem;">Load</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Screening Stage Controls for Judge Demo -->
+                        <div class="card" style="margin-bottom: 0;">
+                            <div class="card-header">
+                                <span class="card-title"><span>⏱️</span> Screening Progression</span>
+                            </div>
+                            <div class="card-body" style="padding: 0.9rem;">
+                                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                                    Simulate temporal test gates sequentially or execute complete analysis:
+                                </p>
+                                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                                    <button class="btn btn-secondary" id="btn-run-24h" style="justify-content: flex-start;">
+                                        <span>1️⃣</span> Run 24h Early Gate (A24 + B24)
+                                    </button>
+                                    <button class="btn btn-secondary" id="btn-run-96h" style="justify-content: flex-start;">
+                                        <span>2️⃣</span> Run 96h Qualification (A96 + B96)
+                                    </button>
+                                    <button class="btn btn-primary" id="btn-run-full" style="justify-content: flex-start;">
+                                        <span>⚡</span> Complete Dual-Gate Assessment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </aside>
+
+                    <!-- Main Dashboard Column -->
+                    <div class="dashboard-main-column">
+                        
+                        <!-- Stage Stepper Banner -->
+                        <div class="stage-stepper" id="workflow-stepper">
+                            <div class="stage-step completed" id="step-0h">
+                                <span class="stage-step-num">0</span>
+                                <div class="stage-step-label">
+                                    <strong>0h Baseline</strong>
+                                    <span>Pre-Burn-In Check</span>
+                                </div>
+                            </div>
+                            <div class="stage-divider"></div>
+                            <div class="stage-step completed" id="step-24h">
+                                <span class="stage-step-num">1</span>
+                                <div class="stage-step-label">
+                                    <strong>24h Early Gate</strong>
+                                    <span>Early Warning Triage</span>
+                                </div>
+                            </div>
+                            <div class="stage-divider"></div>
+                            <div class="stage-step active" id="step-96h">
+                                <span class="stage-step-num">2</span>
+                                <div class="stage-step-label">
+                                    <strong>96h Qualification</strong>
+                                    <span>Reliability Sign-Off</span>
+                                </div>
+                            </div>
+                            <div class="stage-divider"></div>
+                            <div class="stage-step completed" id="step-168h">
+                                <span class="stage-step-num">3</span>
+                                <div class="stage-step-label">
+                                    <strong>168h Benchmark</strong>
+                                    <span>Degradation Forecast</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 9: Combined Final Screening Decision Hero Banner -->
+                        <div class="decision-hero pass" id="decision-hero-card">
+                            <div class="decision-main">
+                                <span class="decision-badge-large" id="hero-decision-badge">PASS</span>
+                                <div class="decision-text">
+                                    <h3 id="hero-decision-title">Parametric Reliability Confirmed</h3>
+                                    <p id="hero-decision-reason">Model detects stable quiescent current and minimal projected drift through 168h. Component meets high-reliability standards.</p>
+                                    <p id="hero-decision-rec" style="font-weight: 600; color: var(--text-primary); margin-top: 0.25rem;">Recommendation: Pass component and release to production inventory.</p>
+                                </div>
+                            </div>
+                            <div class="decision-meta">
+                                <div class="confidence-tag" id="hero-confidence-tag">Confidence: HIGH</div>
+                                <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.35rem;" id="hero-gate-tag">Evaluated @ 96h Gate</div>
+                            </div>
+                        </div>
+
+                        <!-- Top Stat KPI Cards -->
+                        <div class="grid-4" style="margin-bottom: 1.25rem;">
+                            
+                            <!-- Stat 1: Observed Physical IDDQ Shift -->
+                            <div class="stat-card">
+                                <div class="stat-label">
+                                    <span>Observed IDDQ Shift</span>
+                                    <span class="info-tooltip" data-tooltip="IDDQ = quiescent supply current measured while the component is not actively switching. Primary message is actual physical change.">ℹ️</span>
+                                </div>
+                                <div class="stat-value" id="stat-iddq-change">+2.50 μA</div>
+                                <div class="stat-subtext" id="stat-iddq-pct">Change: +2.56% (97.8 μA → 100.3 μA)</div>
+                            </div>
+
+                            <!-- Stat 2: Module A Defect Probability -->
+                            <div class="stat-card">
+                                <div class="stat-label">
+                                    <span>Module A Anomaly Risk</span>
+                                    <span class="info-tooltip" data-tooltip="Probability of abnormal degradation from the trained classification model.">ℹ️</span>
+                                </div>
+                                <div class="stat-value" id="stat-defect-prob">2.5%</div>
+                                <div class="stat-subtext" id="stat-defect-class">Class: Normal (Reliable)</div>
+                            </div>
+
+                            <!-- Stat 3: Module B Forecasted 168h Degradation -->
+                            <div class="stat-card">
+                                <div class="stat-label">
+                                    <span>Module B 168h Forecast</span>
+                                    <span class="info-tooltip" data-tooltip="Model predicted degradation by end-of-life (168h). Expressed in actual physical μA increment and percentage.">ℹ️</span>
+                                </div>
+                                <div class="stat-value" id="stat-forecast-shift">+0.95 μA</div>
+                                <div class="stat-subtext" id="stat-forecast-pct">Projected Drift: +0.97%</div>
+                            </div>
+
+                            <!-- Stat 4: Operational Chamber Stress Saved -->
+                            <div class="stat-card">
+                                <div class="stat-label">
+                                    <span>Chamber Time Optimization</span>
+                                    <span class="info-tooltip" data-tooltip="Reduction in burn-in chamber dwell time achieved through early exit at this screening gate.">ℹ️</span>
+                                </div>
+                                <div class="stat-value" id="stat-chamber-saved">72 Hours</div>
+                                <div class="stat-subtext" id="stat-chamber-sub">Qualified at 96h vs 168h standard</div>
+                            </div>
+
+                        </div>
+
+                        <!-- Section 5 & 6: Actual Burn-In Measurements & Physical Changes Table -->
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="card-title">
+                                    <span>📋</span> Actual Sensor Measurements & Physical Changes
+                                    <span class="info-tooltip" data-tooltip="Physical parameter readings from genuine burn-in screening. Shows actual physical difference as primary signal; percentages as secondary.">ℹ️</span>
+                                </span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);" id="table-comp-indicator">Component: SYN_C01216</span>
+                            </div>
+                            <div class="card-body" style="padding: 0;">
+                                <table class="measurements-table" id="measurements-data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Physical Parameter</th>
+                                            <th>0h Pre-Burn-In</th>
+                                            <th>24h Early Gate</th>
+                                            <th>96h Mid Gate</th>
+                                            <th>168h Benchmark</th>
+                                            <th>0h → 24h Physical Shift</th>
+                                            <th>0h → 96h Physical Shift</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="measurements-tbody">
+                                        <!-- Populated dynamically via app.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Section 7, 8, 9: Module A & Module B Comparison Grid -->
+                        <div class="grid-2">
+                            
+                            <!-- Module A Card -->
+                            <div class="card" style="margin-bottom: 1.25rem;">
+                                <div class="card-header">
+                                    <span class="card-title">
+                                        <span>🛡️</span> Module A — Defect & Anomaly Classification
+                                    </span>
+                                    <span class="badge badge-blue">Classifier</span>
+                                </div>
+                                <div class="card-body">
+                                    <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem;">
+                                        Answers: <em>"Does this component show evidence of abnormal or drifting behavior?"</em>
+                                    </p>
+                                    
+                                    <div class="grid-2" style="gap: 0.75rem; margin-bottom: 0.75rem;">
+                                        <!-- A24 -->
+                                        <div class="module-box" id="box-mod-a24">
+                                            <div class="module-box-header">
+                                                <span class="module-box-title">24h Early Warning</span>
+                                                <span class="badge badge-pass" id="a24-badge">NORMAL</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Defect Probability:</span>
+                                                <span class="module-meta-val" id="a24-prob">38.4%</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Algorithm:</span>
+                                                <span class="module-meta-val">LogisticRegression</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Features Admitted:</span>
+                                                <span class="module-meta-val">11 (0h + 24h only)</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- A96 -->
+                                        <div class="module-box" id="box-mod-a96">
+                                            <div class="module-box-header">
+                                                <span class="module-box-title">96h Higher-Confidence</span>
+                                                <span class="badge badge-pass" id="a96-badge">NORMAL</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Defect Probability:</span>
+                                                <span class="module-meta-val" id="a96-prob">2.5%</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Algorithm:</span>
+                                                <span class="module-meta-val">RandomForest (150t)</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Features Admitted:</span>
+                                                <span class="module-meta-val">19 (0h+24h+96h)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); background: var(--bg-surface-subtle); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);">
+                                        🔒 <strong>Temporal Isolation:</strong> 24h prediction never accesses 96h or 168h channels. 96h prediction never accesses 168h end-of-test data.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Module B Card -->
+                            <div class="card" style="margin-bottom: 1.25rem;">
+                                <div class="card-header">
+                                    <span class="card-title">
+                                        <span>📈</span> Module B — 168h Continuous Degradation Forecast
+                                    </span>
+                                    <span class="badge badge-blue">Regressor</span>
+                                </div>
+                                <div class="card-body">
+                                    <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1rem;">
+                                        Answers: <em>"How much IDDQ degradation is expected by 168h burn-in completion?"</em>
+                                    </p>
+
+                                    <div class="grid-2" style="gap: 0.75rem; margin-bottom: 0.75rem;">
+                                        <!-- B24 -->
+                                        <div class="module-box" id="box-mod-b24">
+                                            <div class="module-box-header">
+                                                <span class="module-box-title">B24 Forecast</span>
+                                                <span class="badge badge-review" id="b24-badge">+3.57%</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Predicted 168h Drift:</span>
+                                                <span class="module-meta-val" id="b24-drift">+3.57%</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Estimated IDDQ Shift:</span>
+                                                <span class="module-meta-val" id="b24-shift">+3.49 μA</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Algorithm:</span>
+                                                <span class="module-meta-val">GradientBoosting</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- B96 -->
+                                        <div class="module-box" id="box-mod-b96">
+                                            <div class="module-box-header">
+                                                <span class="module-box-title">B96 Forecast</span>
+                                                <span class="badge badge-pass" id="b96-badge">+0.97%</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Predicted 168h Drift:</span>
+                                                <span class="module-meta-val" id="b96-drift">+0.97%</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Estimated IDDQ Shift:</span>
+                                                <span class="module-meta-val" id="b96-shift">+0.95 μA</span>
+                                            </div>
+                                            <div class="module-meta-row">
+                                                <span class="module-meta-label">Algorithm:</span>
+                                                <span class="module-meta-val">RandomForestRegressor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); background: var(--bg-surface-subtle); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);">
+                                        🎯 <strong>Forecast Calibration:</strong> The models predict the final percentage shift in IDDQ at 168h without requiring 144 additional oven hours.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Section 10 & 11: Charts Grid -->
+                        <div class="grid-2">
+                            
+                            <!-- Chart 1: Parameter Progression Line Chart -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-title">
+                                        <span>📉</span> Chart 1 — Parameter Progression Across Burn-In
+                                    </span>
+                                    <div style="display: flex; gap: 0.35rem;">
+                                        <button class="btn btn-secondary" id="btn-chart-param-iddq" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">IDDQ</button>
+                                        <button class="btn btn-secondary" id="btn-chart-param-leak" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">Leakage</button>
+                                        <button class="btn btn-secondary" id="btn-chart-param-delay" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">Delay</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chart-progression-canvas"></canvas>
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+                                        Solid line: Actual measured physical readings (0h → 24h → 96h → 168h).
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chart 2: Parameter Physical Change Bar Chart -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-title">
+                                        <span>📊</span> Chart 2 — Actual Parameter Physical Shift
+                                    </span>
+                                    <span style="font-size: 0.72rem; color: var(--text-muted);">0h → 96h Shift</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chart-delta-canvas"></canvas>
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+                                        Compares absolute physical changes across IDDQ (μA), Leakage (μA), and Propagation Delay (ns).
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Charts Row 2: 168h Forecast & Feature Importance -->
+                        <div class="grid-2">
+                            
+                            <!-- Chart 3: 168h Forecast Comparison -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-title">
+                                        <span>🎯</span> Chart 3 — 168h Degradation Forecast (Measured vs Predicted)
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chart-forecast-canvas"></canvas>
+                                    </div>
+                                    <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+                                        Green bar: Measured IDDQ. Striped bar: Model predicted 168h degradation target.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chart 4 & Section 10: Feature Importance / Degradation Drivers -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="card-title">
+                                        <span>🔍</span> Section 10 — What is Driving the Degradation?
+                                    </span>
+                                    <span class="badge badge-neutral">Model Feature Weights</span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container">
+                                        <canvas id="chart-importance-canvas"></canvas>
+                                    </div>
+                                    <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
+                                        <strong>Statistical note:</strong> Parameters with highest Gini split importance in the trained model.
+                                        Describes model feature influence, not physical causation.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ================================================================
+                 VIEW 2: DATASET OVERVIEW (SECTION 12)
+                 ================================================================ -->
+            <section id="view-dataset" class="view-panel">
+                
+                <div class="section-header">
+                    <h2 class="section-title"><span>📊</span> Dataset Overview & Ground Truth Distribution</h2>
+                    <p class="section-desc">Authentic distribution of 10,000 components across normal, latent drifting, and gross anomalous populations.</p>
+                </div>
+
+                <div class="grid-4" style="margin-bottom: 1.25rem;">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Components</div>
+                        <div class="stat-value" id="overview-total-val">10,000</div>
+                        <div class="stat-subtext">Ground-truth population</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Normal (Reliable)</div>
+                        <div class="stat-value" style="color: var(--status-pass);" id="overview-normal-val">7,000 (70%)</div>
+                        <div class="stat-subtext">Nominal baseline stability</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Latent Drifting</div>
+                        <div class="stat-value" style="color: var(--status-review);" id="overview-drift-val">2,000 (20%)</div>
+                        <div class="stat-subtext">Subtle temporal shift (5–15%)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Gross Anomalous</div>
+                        <div class="stat-value" style="color: var(--status-reject);" id="overview-anom-val">1,000 (10%)</div>
+                        <div class="stat-subtext">Severe defect (>20% drift)</div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    
+                    <!-- Donut Chart of Sub-Populations -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><span>🍩</span> Component Sub-Population Proportions</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="chart-donut-overview"></canvas>
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;">
+                                Authentic component distribution in <code>data/ground_truth/component_ground_truth.csv</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Burn-In Gate Specifications -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title"><span>🕒</span> Industrial Burn-In Test Gate Timeline</span>
+                        </div>
+                        <div class="card-body">
+                            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                                    <span class="badge badge-neutral" style="font-family: var(--font-mono); font-size: 0.8rem; padding: 0.3rem 0.6rem;">0h</span>
+                                    <div>
+                                        <strong>Pre-Burn-In ATE Parametric Check</strong>
+                                        <p style="font-size: 0.78rem; color: var(--text-muted);">Baseline reference measurements. 98.25% of drifting parts appear indistinguishable from normal at 0h.</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                                    <span class="badge badge-blue" style="font-family: var(--font-mono); font-size: 0.8rem; padding: 0.3rem 0.6rem;">24h</span>
+                                    <div>
+                                        <strong>Early Warning Screening Gate</strong>
+                                        <p style="font-size: 0.78rem; color: var(--text-muted);">Module A24 + B24 evaluate 11 temporal features. Obvious gross defects are ejected immediately to save oven energy.</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                                    <span class="badge badge-pass" style="font-family: var(--font-mono); font-size: 0.8rem; padding: 0.3rem 0.6rem;">96h</span>
+                                    <div>
+                                        <strong>High-Confidence Mid-Stress Qualification Gate</strong>
+                                        <p style="font-size: 0.78rem; color: var(--text-muted);">Module A96 + B96 incorporate 19 features including multi-drift metrics. High-reliability parts pass early; marginal parts rejected.</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                                    <span class="badge badge-neutral" style="font-family: var(--font-mono); font-size: 0.8rem; padding: 0.3rem 0.6rem;">168h</span>
+                                    <div>
+                                        <strong>Standard Full Burn-In Benchmark (MIL-STD-883 / AEC-Q100)</strong>
+                                        <p style="font-size: 0.78rem; color: var(--text-muted);">Traditional end-of-test benchmark. Used exclusively for model validation and true target verification.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- ================================================================
+                 VIEW 3: MODEL BENCHMARKS & METHODOLOGY
+                 ================================================================ -->
+            <section id="view-methodology" class="view-panel">
+                
+                <div class="section-header">
+                    <h2 class="section-title"><span>🛡️</span> Locked Test Set Evaluation & Leakage Protection</h2>
+                    <p class="section-desc">Performance metrics strictly evaluated once on the unseen locked test set ($N=1,500$ components).</p>
+                </div>
+
+                <div class="grid-2" style="margin-bottom: 1.25rem;">
+                    
+                    <!-- Module A Locked Test Metrics -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Module A Locked Test Results (Classification)</span>
+                            <span class="badge badge-neutral">N = 1,500</span>
+                        </div>
+                        <div class="card-body">
+                            <table class="measurements-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>24h Gate (A24)</th>
+                                        <th>96h Gate (A96)</th>
+                                        <th>Improvement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Accuracy</strong></td>
+                                        <td class="mono">82.40%</td>
+                                        <td class="mono">97.67%</td>
+                                        <td class="mono" style="color: var(--status-pass);">+15.27%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Recall (Defect Capture)</strong></td>
+                                        <td class="mono">73.78%</td>
+                                        <td class="mono">94.00%</td>
+                                        <td class="mono" style="color: var(--status-pass);">+20.22%</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>FNR (Defect Escape)</strong></td>
+                                        <td class="mono">26.22%</td>
+                                        <td class="mono">6.00%</td>
+                                        <td class="mono" style="color: var(--status-pass);">-20.22% (77% rel.)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ROC-AUC</strong></td>
+                                        <td class="mono">0.8719</td>
+                                        <td class="mono">0.9944</td>
+                                        <td class="mono" style="color: var(--status-pass);">+0.1225</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Module B Locked Test Metrics -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Module B Locked Test Results (Regression)</span>
+                            <span class="badge badge-neutral">N = 1,500</span>
+                        </div>
+                        <div class="card-body">
+                            <table class="measurements-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>24h Gate (B24)</th>
+                                        <th>96h Gate (B96)</th>
+                                        <th>Improvement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>RMSE (Prediction Error)</strong></td>
+                                        <td class="mono">4.033%</td>
+                                        <td class="mono">1.415%</td>
+                                        <td class="mono" style="color: var(--status-pass);">-2.618% (65% rel.)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>MAE (Mean Absolute Error)</strong></td>
+                                        <td class="mono">2.721%</td>
+                                        <td class="mono">0.877%</td>
+                                        <td class="mono" style="color: var(--status-pass);">-1.844% (68% rel.)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>R² Score (Goodness of Fit)</strong></td>
+                                        <td class="mono">0.7890</td>
+                                        <td class="mono">0.9740</td>
+                                        <td class="mono" style="color: var(--status-pass);">+0.1850</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Model Architecture</strong></td>
+                                        <td class="mono">GradientBoosting</td>
+                                        <td class="mono">RandomForest</td>
+                                        <td class="mono">Tuned Ensembles</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Leakage Audit Box -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title"><span>🛡️</span> Mathematical Safeguards & Anti-Leakage Proof</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid-3" style="font-size: 0.8rem;">
+                            <div style="padding: 0.75rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                                <strong>1. No 168h Future Features</strong>
+                                <p style="color: var(--text-muted); margin-top: 0.25rem;">
+                                    Physical 168h measurements are excluded from the inference feature matrices. Module B predicts 168h drift; it never observes it.
+                                </p>
+                            </div>
+                            <div style="padding: 0.75rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                                <strong>2. No 96h Features in 24h Gate</strong>
+                                <p style="color: var(--text-muted); margin-top: 0.25rem;">
+                                    The 24h gate strictly receives 11 features. 96h sensor readings cannot contaminate the 24h early screening decisions.
+                                </p>
+                            </div>
+                            <div style="padding: 0.75rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                                <strong>3. Zero Ground-Truth Contamination</strong>
+                                <p style="color: var(--text-muted); margin-top: 0.25rem;">
+                                    Labels (<code>module_a_label</code>, <code>iddq_drift_168h_true</code>) are stripped before sending responses to the UI.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Application Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
