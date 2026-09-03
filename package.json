@@ -1,0 +1,17 @@
+{
+  "name": "sih-burnin-screening",
+  "version": "1.0.0",
+  "description": "AI-Driven Anomaly Detection in Component Burn-In & Screening (SIH 2026)",
+  "scripts": {
+    "dev": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload",
+    "start": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000",
+    "test": "python -m pytest tests/ -v"
+  },
+  "keywords": [
+    "semiconductor",
+    "burn-in",
+    "fastapi",
+    "machine-learning"
+  ],
+  "author": "SIH 2026 Team"
+}
