@@ -102,7 +102,8 @@ body {
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 1.15rem;
+  gap: 1rem;
+  flex-shrink: 0;
 }
 
 /* AstraNova Brand Identity */
@@ -144,6 +145,7 @@ body {
   flex-direction: column;
   justify-content: center;
   line-height: 1.15;
+  flex-shrink: 0;
 }
 
 .astranova-name {
@@ -184,6 +186,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .brand-title {
@@ -192,6 +195,7 @@ body {
   color: var(--text-main);
   letter-spacing: -0.01em;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .brand-subtitle {
@@ -199,6 +203,7 @@ body {
   color: var(--text-muted);
   line-height: 1.25;
   font-weight: 400;
+  white-space: nowrap;
 }
 
 /* Tab Navigation */
@@ -851,6 +856,12 @@ body {
 }
 
 /* Responsive Header */
+@media (max-width: 1320px) {
+  .brand-subtitle {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .header-inner {
     flex-direction: column;
