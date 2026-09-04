@@ -88,30 +88,102 @@ body {
 .brand-section {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.15rem;
 }
 
-.brand-logo-badge {
-    background: #0f172a;
-    color: #ffffff;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+/* AstraNova Brand Identity */
+.astranova-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    user-select: none;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.astranova-logo-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(37, 99, 235, 0.15);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.astranova-logo-mark:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(56, 189, 248, 0.4);
+}
+
+.astranova-icon {
+    display: block;
+    width: 38px;
+    height: 38px;
+}
+
+.astranova-brand-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.15;
+}
+
+.astranova-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.025em;
+    display: inline-flex;
+    align-items: center;
+}
+
+.astranova-name-accent {
+    background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 1px;
+}
+
+.astranova-tag {
+    font-size: 0.62rem;
     font-weight: 700;
-    padding: 0.35rem 0.6rem;
-    border-radius: var(--radius-sm);
-    letter-spacing: 0.05em;
+    color: var(--primary-blue);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    opacity: 0.9;
+}
+
+.brand-divider {
+    width: 1px;
+    height: 34px;
+    background: var(--border-color);
+    margin: 0 0.1rem;
+    flex-shrink: 0;
+}
+
+.brand-headings {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .brand-title {
-    font-size: 1.15rem;
+    font-size: 1.12rem;
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: -0.01em;
+    line-height: 1.2;
 }
 
 .brand-subtitle {
     font-size: 0.78rem;
     color: var(--text-muted);
+    line-height: 1.25;
 }
 
 .header-status-strip {
@@ -826,6 +898,14 @@ body {
     .header-inner {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.85rem;
+    }
+    .brand-section {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+    .brand-divider {
+        display: none;
     }
     .grid-2 {
         grid-template-columns: 1fr;
