@@ -5,6 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    startLiveClock();
     initNavigation();
     initLiveTester();
     loadModelPerformance();
@@ -350,4 +351,23 @@ async function loadModelPerformance() {
     } catch (err) {
         console.error("Error loading performance data:", err);
     }
+}
+
+// -----------------------------------------------------------------------------
+// Live Clock (Real-Time System Detector)
+// -----------------------------------------------------------------------------
+function startLiveClock() {
+    const timeEl = document.getElementById('header-live-time');
+    if (!timeEl) return;
+    
+    function updateLiveTime() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        timeEl.textContent = `${hh}:${mm}:${ss}`;
+    }
+    
+    updateLiveTime();
+    setInterval(updateLiveTime, 1000);
 }

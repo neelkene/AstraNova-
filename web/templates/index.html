@@ -61,24 +61,33 @@
                         </div>
                     </div>
                     <div class="brand-divider" aria-hidden="true"></div>
-                    <div class="brand-headings">
-                        <h1 class="brand-title">AI-Driven Burn-In Screening</h1>
-                        <p class="brand-subtitle">Temporal anomaly detection and 168h degradation forecasting</p>
+                    <h1 class="brand-title">AI-Driven Burn-In Screening</h1>
+                </div>
+
+                <div class="header-center">
+                    <div class="status-pill" id="sys-status-pill" title="System Backend Status">
+                        <span class="status-indicator-dot" id="sys-status-dot"></span>
+                        <span id="sys-status-text">System Online</span>
+                    </div>
+                    <div class="live-clock-pill" id="live-clock-pill" title="Real-Time System Clock">
+                        <span class="live-dot" aria-hidden="true"></span>
+                        <span class="live-label">Live:</span>
+                        <span class="live-time" id="header-live-time">--:--:--</span>
                     </div>
                 </div>
-                
+
                 <nav class="header-nav" aria-label="Dashboard Navigation">
                     <button class="nav-tab-btn active" data-view="view-overview">
-                        <span>📊</span> Overview Dashboard
+                        <span aria-hidden="true">📊</span> Overview Dashboard
                     </button>
                     <button class="nav-tab-btn" data-view="view-demo">
-                        <span>⚡</span> Live Component Tester
+                        <span aria-hidden="true">⚡</span> Live Component Tester
                     </button>
                     <button class="nav-tab-btn" data-view="view-performance">
-                        <span>📈</span> Model Performance & Judge Q&A
+                        <span aria-hidden="true">📈</span> Model Performance &amp; Judge Q&amp;A
                     </button>
                     <button class="nav-tab-btn" data-view="view-architecture">
-                        <span>🛡️</span> Architecture & Leakage Protection
+                        <span aria-hidden="true">🛡️</span> Architecture &amp; Leakage Protection
                     </button>
                 </nav>
             </div>

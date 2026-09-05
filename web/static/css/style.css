@@ -11,18 +11,18 @@
   --bg-surface-elevated: #ffffff;
   --bg-surface-subtle: #f1f5f9;
   --bg-surface-alt: #f8fafc;
-  
+
   /* Borders */
   --border-subtle: #e2e8f0;
   --border-focus: #2563eb;
   --border-card: #e2e8f0;
-  
+
   /* Typography */
   --text-main: #0f172a;
   --text-muted: #64748b;
   --text-dim: #94a3b8;
   --text-inverse: #ffffff;
-  
+
   /* Brand Accents */
   --brand-primary: #0f172a;
   --brand-blue: #2563eb;
@@ -30,25 +30,25 @@
   --brand-teal: #0d9488;
   --brand-teal-light: #f0fdfa;
   --brand-indigo: #4f46e5;
-  
+
   /* Status Colors */
   --status-pass: #16a34a;
   --status-pass-bg: #dcfce7;
   --status-pass-border: #86efac;
-  
+
   --status-review: #d97706;
   --status-review-bg: #fef3c7;
   --status-review-border: #fcd34d;
-  
+
   --status-reject: #dc2626;
   --status-reject-bg: #fee2e2;
   --status-reject-border: #fca5a5;
-  
+
   /* Elevation Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-  
+
   /* Geometry */
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -56,8 +56,17 @@
   --radius-xl: 20px;
 }
 
-*, *::before, *::after {
+html {
   box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
   margin: 0;
   padding: 0;
 }
@@ -68,6 +77,10 @@ body {
   color: var(--text-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
 }
 
 /* ==============================================================================
@@ -78,9 +91,12 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
-/* Header */
+/* ── Header ──────────────────────────────────────────────────────────────── */
 .app-header {
   background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle);
@@ -88,32 +104,40 @@ body {
   top: 0;
   z-index: 100;
   box-shadow: var(--shadow-sm);
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
+/* Single row, strictly viewport-contained */
 .header-inner {
-  max-width: 1400px;
+  width: 100%;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0.85rem 1.5rem;
+  padding: 0 1.25rem;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
+  box-sizing: border-box;
 }
 
+/* ── Left: logo + divider + title ──────────────────────────────────────── */
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.85rem;
   flex-shrink: 0;
 }
 
-/* AstraNova Brand Identity */
+/* AstraNova logo + wordmark */
 .astranova-brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  text-decoration: none;
+  gap: 0.65rem;
   user-select: none;
-  cursor: pointer;
+  cursor: default;
   flex-shrink: 0;
 }
 
@@ -122,22 +146,23 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 9px;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(37, 99, 235, 0.15);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow  0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .astranova-logo-mark:hover {
-  transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25), 0 0 0 1px rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.22), 0 0 0 1px rgba(56, 189, 248, 0.4);
 }
 
 .astranova-icon {
   display: block;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
 }
 
 .astranova-brand-text {
@@ -149,7 +174,7 @@ body {
 }
 
 .astranova-name {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.025em;
@@ -161,78 +186,166 @@ body {
   background: linear-gradient(135deg, #2563eb 0%, #0284c7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-left: 1px;
 }
 
 .astranova-tag {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 700;
   color: var(--primary);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   font-family: var(--font-mono);
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
+/* Thin vertical divider between wordmark and page title */
 .brand-divider {
   width: 1px;
-  height: 34px;
+  height: 28px;
   background: var(--border-color);
-  margin: 0 0.1rem;
   flex-shrink: 0;
 }
 
-.brand-headings {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
+/* Page title inline in the brand row */
 .brand-title {
-  font-size: 1.12rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: -0.01em;
-  line-height: 1.2;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.brand-subtitle {
-  font-size: 0.78rem;
+/* ── Center: system status pill & live clock ────────────────────────────── */
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+  justify-content: center;
+  min-width: 0;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--text-muted);
-  line-height: 1.25;
-  font-weight: 400;
+  padding: 0.28rem 0.65rem;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
   white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
 }
 
-/* Tab Navigation */
+.status-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-pass, #10b981);
+  flex-shrink: 0;
+}
+
+.status-indicator-dot.degraded {
+  background: var(--status-review, #f59e0b);
+}
+
+/* Live Time Detector Pill */
+.live-clock-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 0.28rem 0.65rem;
+  background: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: liveDotPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes liveDotPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    transform: scale(0.95);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    transform: scale(0.95);
+  }
+}
+
+.live-label {
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.live-time {
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.02em;
+}
+
+/* ── Right: navigation tabs ─────────────────────────────────────────────── */
 .header-nav {
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.2rem;
   background: var(--bg-surface-subtle);
-  padding: 0.25rem;
+  padding: 0.2rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  margin-left: auto;           /* push nav to the right */
 }
 
 .nav-tab-btn {
   background: transparent;
   border: none;
-  padding: 0.45rem 1rem;
-  font-size: 0.85rem;
+  padding: 0.38rem 0.75rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-muted);
-  border-radius: var(--radius-sm);
+  border-radius: calc(var(--radius-md) - 2px);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.15s ease, background 0.15s ease;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-tab-btn:hover {
   color: var(--text-main);
+  background: rgba(15, 23, 42, 0.04);
 }
 
 .nav-tab-btn.active {
@@ -241,6 +354,8 @@ body {
   font-weight: 600;
   box-shadow: var(--shadow-sm);
 }
+
+
 
 /* Main Content Views */
 .main-content {
@@ -261,8 +376,15 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ==============================================================================
@@ -300,11 +422,33 @@ body {
   letter-spacing: 0.5px;
 }
 
-.badge-blue { background: var(--brand-blue-light); color: var(--brand-blue); }
-.badge-teal { background: var(--brand-teal-light); color: var(--brand-teal); }
-.badge-pass { background: var(--status-pass-bg); color: var(--status-pass); border: 1px solid var(--status-pass-border); }
-.badge-review { background: var(--status-review-bg); color: var(--status-review); border: 1px solid var(--status-review-border); }
-.badge-reject { background: var(--status-reject-bg); color: var(--status-reject); border: 1px solid var(--status-reject-border); }
+.badge-blue {
+  background: var(--brand-blue-light);
+  color: var(--brand-blue);
+}
+
+.badge-teal {
+  background: var(--brand-teal-light);
+  color: var(--brand-teal);
+}
+
+.badge-pass {
+  background: var(--status-pass-bg);
+  color: var(--status-pass);
+  border: 1px solid var(--status-pass-border);
+}
+
+.badge-review {
+  background: var(--status-review-bg);
+  color: var(--status-review);
+  border: 1px solid var(--status-review-border);
+}
+
+.badge-reject {
+  background: var(--status-reject-bg);
+  color: var(--status-reject);
+  border: 1px solid var(--status-reject-border);
+}
 
 /* Card System */
 .card {
@@ -333,7 +477,11 @@ body {
 }
 
 @media (max-width: 960px) {
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ==============================================================================
@@ -538,7 +686,9 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .demo-layout { grid-template-columns: 1fr; }
+  .demo-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Component Selector Sidebar */
@@ -671,7 +821,8 @@ body {
   margin-top: 0.75rem;
 }
 
-.sensor-table th, .sensor-table td {
+.sensor-table th,
+.sensor-table td {
   padding: 0.5rem 0.75rem;
   text-align: left;
   border-bottom: 1px solid var(--border-subtle);
@@ -800,7 +951,7 @@ body {
   padding: 0.85rem;
   font-size: 0.88rem;
   margin-top: 0.75rem;
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* ==============================================================================
@@ -839,7 +990,8 @@ body {
   margin: 1rem 0;
 }
 
-.perf-table th, .perf-table td {
+.perf-table th,
+.perf-table td {
   padding: 0.65rem 0.85rem;
   text-align: left;
   border-bottom: 1px solid var(--border-subtle);
@@ -855,25 +1007,192 @@ body {
   background: var(--bg-surface-alt);
 }
 
-/* Responsive Header */
-@media (max-width: 1320px) {
-  .brand-subtitle {
-    display: none;
+/* ── Responsive Header & Viewport Containment ────────────────────────────── */
+
+/* 1200px — tighten nav button padding (4 buttons in Flask) */
+@media (max-width: 1200px) {
+  .header-inner {
+    padding: 0 1rem;
+    gap: 0.5rem;
+  }
+
+  .nav-tab-btn {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.76rem;
+    gap: 0.25rem;
+  }
+
+  .astranova-name {
+    font-size: 1.05rem;
   }
 }
 
-@media (max-width: 768px) {
+/* 1040px — hide tag, compact title and pills */
+@media (max-width: 1040px) {
+  .astranova-tag {
+    display: none;
+  }
+
+  .brand-title {
+    font-size: 0.9rem;
+  }
+
+  .header-center {
+    gap: 0.4rem;
+  }
+
+  .status-pill,
+  .live-clock-pill {
+    padding: 0.24rem 0.48rem;
+    font-size: 0.72rem;
+  }
+
+  .nav-tab-btn {
+    padding: 0.32rem 0.48rem;
+    font-size: 0.73rem;
+  }
+}
+
+/* 920px — collapse status pill text to dot, tighten spacing */
+@media (max-width: 920px) {
   .header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.85rem;
+    padding: 0 0.75rem;
+    gap: 0.4rem;
   }
-  .brand-section {
-    flex-wrap: wrap;
-    gap: 0.75rem;
+
+  .brand-title {
+    font-size: 0.85rem;
   }
+
+  #sys-status-text {
+    display: none;
+  }
+
+  .status-pill {
+    padding: 0.28rem 0.45rem;
+  }
+
+  .live-clock-pill {
+    padding: 0.24rem 0.45rem;
+    font-size: 0.7rem;
+  }
+
+  .nav-tab-btn {
+    padding: 0.3rem 0.42rem;
+    font-size: 0.71rem;
+  }
+}
+
+/* 840px — hide brand subtitle so 4 buttons + logo + clock fit in 1 row */
+@media (max-width: 840px) {
   .brand-divider {
     display: none;
   }
+
+  .brand-title {
+    display: none;
+  }
+
+  .nav-tab-btn {
+    padding: 0.3rem 0.38rem;
+    font-size: 0.7rem;
+    gap: 0.2rem;
+  }
 }
 
+/* 768px — stack brand + clock on row 1, 4 nav buttons on row 2 */
+@media (max-width: 768px) {
+  .header-inner {
+    height: auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    padding: 0.5rem 0.85rem;
+    gap: 0.45rem;
+    overflow: visible;
+  }
+
+  .brand-section {
+    flex: 1 1 auto;
+  }
+
+  .brand-title {
+    display: block;
+    font-size: 0.86rem;
+  }
+
+  .brand-divider {
+    display: block;
+  }
+
+  .header-center {
+    display: flex;
+    flex: 0 0 auto;
+    margin-left: auto;
+    gap: 0.35rem;
+  }
+
+  .status-pill {
+    display: inline-flex;
+  }
+
+  #sys-status-text {
+    display: inline;
+    font-size: 0.7rem;
+  }
+
+  .live-clock-pill {
+    display: inline-flex;
+  }
+
+  .header-nav {
+    width: 100%;
+    margin-left: 0;
+    justify-content: stretch;
+    gap: 0.2rem;
+  }
+
+  .nav-tab-btn {
+    flex: 1 1 0;
+    justify-content: center;
+    font-size: 0.72rem;
+    padding: 0.38rem 0.3rem;
+    gap: 0.2rem;
+  }
+}
+
+/* 480px — ultra-compact mobile */
+@media (max-width: 480px) {
+  .header-inner {
+    padding: 0.45rem 0.5rem;
+  }
+
+  .brand-title {
+    display: none;
+  }
+
+  .brand-divider {
+    display: none;
+  }
+
+  #sys-status-text {
+    display: none;
+  }
+
+  .live-clock-pill .live-label {
+    display: none;
+  }
+
+  .live-clock-pill {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.68rem;
+  }
+
+  .nav-tab-btn span[aria-hidden="true"] {
+    display: none;
+  }
+
+  .nav-tab-btn {
+    font-size: 0.68rem;
+    padding: 0.36rem 0.15rem;
+  }
+}

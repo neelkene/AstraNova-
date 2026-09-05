@@ -36,6 +36,7 @@ const state = {
 // Initialization
 // -----------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
+    startLiveClock();
     initNavigation();
     initControls();
     await checkSystemHealth();
@@ -161,16 +162,39 @@ async function checkSystemHealth() {
 
         if (data.status === 'ok') {
             dot.className = 'status-indicator-dot';
-            text.textContent = 'System Online: All 4 Models Loaded';
+            text.textContent = 'System Online';
+            const pill = document.getElementById('sys-status-pill');
+            if (pill) pill.setAttribute('title', 'System Online: All 4 ML Models Loaded');
         } else {
             dot.className = 'status-indicator-dot degraded';
-            text.textContent = 'Degraded: Check Model Status';
+            text.textContent = 'Degraded';
+            const pill = document.getElementById('sys-status-pill');
+            if (pill) pill.setAttribute('title', 'Degraded: Check Model Status');
         }
     } catch (err) {
         dot.className = 'status-indicator-dot degraded';
         text.textContent = 'Backend Offline';
         console.error('API health check error:', err);
     }
+}
+
+// -----------------------------------------------------------------------------
+// Live Clock (Real-Time System Detector)
+// -----------------------------------------------------------------------------
+function startLiveClock() {
+    const timeEl = document.getElementById('header-live-time');
+    if (!timeEl) return;
+    
+    function updateLiveTime() {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        timeEl.textContent = `${hh}:${mm}:${ss}`;
+    }
+    
+    updateLiveTime();
+    setInterval(updateLiveTime, 1000);
 }
 
 // -----------------------------------------------------------------------------
