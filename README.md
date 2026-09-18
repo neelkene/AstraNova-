@@ -6,7 +6,7 @@ This project develops an AI-driven system for anomaly detection, early degradati
 
 Burn-in testing stresses components under elevated temperatures and operating voltages over time points (0h, 24h, 96h, 168h) to trigger infant mortality defects and screen out latent anomalies before field deployment.
 
----
+---   
 
 ## Project Structure
 ```text
