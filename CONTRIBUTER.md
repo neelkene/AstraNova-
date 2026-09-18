@@ -8,7 +8,7 @@ We thank the following people for their valuable contributions to this project:
 ## Contributors List
 
 - Neel kene (@neelkene)
-- Rushikesh magar (@rushikesh_magar_design)
+- Rushikesh magar (@rushikeshmagar710-design)
 
 
 here (@username) is git user profile name 
