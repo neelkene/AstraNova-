@@ -10,8 +10,8 @@
 // -----------------------------------------------------------------------------
 // Global Configuration & API Base Detection
 // -----------------------------------------------------------------------------
-const API_BASE = (window.location.port === '8000' || window.location.port === '') 
-    ? '' 
+const API_BASE = (window.location.port === '8000' || window.location.port === '')
+    ? ''
     : 'http://127.0.0.1:8000';
 
 // Global Application State
@@ -184,7 +184,7 @@ async function checkSystemHealth() {
 function startLiveClock() {
     const timeEl = document.getElementById('header-live-time');
     if (!timeEl) return;
-    
+
     function updateLiveTime() {
         const now = new Date();
         const hh = String(now.getHours()).padStart(2, '0');
@@ -192,7 +192,7 @@ function startLiveClock() {
         const ss = String(now.getSeconds()).padStart(2, '0');
         timeEl.textContent = `${hh}:${mm}:${ss}`;
     }
-    
+
     updateLiveTime();
     setInterval(updateLiveTime, 1000);
 }
