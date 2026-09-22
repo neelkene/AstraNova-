@@ -493,59 +493,39 @@
 
                         </div>
 
-                        <!-- Section 10 & 11: Charts Grid -->
-                        <div class="grid-2">
+                        <!-- Section 10: Primary Analysis Section (Sensor Trajectory Table & 168h Degradation Forecast) -->
+                        <div class="grid-2" id="sensor-analysis-section">
 
-                            <!-- Chart 1: Parameter Progression Line Chart -->
+                            <!-- Clean Professional Sensor Table Card -->
                             <div class="card">
                                 <div class="card-header">
                                     <span class="card-title">
-                                        <span>📉</span> Chart 1 — Parameter Progression Across Burn-In
+                                        <span>📋</span> Sensor Readings Trajectory
+                                        <span class="info-tooltip"
+                                            data-tooltip="Telemetry tracking of key physical sensor readings across burn-in stages, reflecting early gate drift and qualification progression.">ℹ️</span>
                                     </span>
-                                    <div style="display: flex; gap: 0.35rem;">
-                                        <button class="btn btn-secondary" id="btn-chart-param-iddq"
-                                            style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">IDDQ</button>
-                                        <button class="btn btn-secondary" id="btn-chart-param-leak"
-                                            style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">Leakage</button>
-                                        <button class="btn btn-secondary" id="btn-chart-param-delay"
-                                            style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">Delay</button>
-                                    </div>
+                                    <span class="badge badge-blue">Hardware Telemetry</span>
                                 </div>
-                                <div class="card-body">
-                                    <div class="chart-container">
-                                        <canvas id="chart-progression-canvas"></canvas>
-                                    </div>
-                                    <div
-                                        style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
-                                        Solid line: Actual measured physical readings (0h → 24h → 96h → 168h).
+                                <div class="card-body" style="padding: 0;">
+                                    <div style="overflow-x: auto;">
+                                        <table class="measurements-table" id="sensor-trajectory-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Burn-In Stage</th>
+                                                    <th>IDDQ (μA)</th>
+                                                    <th>Leakage (μA)</th>
+                                                    <th>Delay (ns)</th>
+                                                    <th>Chamber Cond.</th>
+                                                    <th>Gate Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="sensor-trajectory-tbody">
+                                                <!-- Populated dynamically via app.js -->
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Chart 2: Parameter Physical Change Bar Chart -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <span class="card-title">
-                                        <span>📊</span> Chart 2 — Actual Parameter Physical Shift
-                                    </span>
-                                    <span style="font-size: 0.72rem; color: var(--text-muted);">0h → 96h Shift</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-container">
-                                        <canvas id="chart-delta-canvas"></canvas>
-                                    </div>
-                                    <div
-                                        style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
-                                        Compares absolute physical changes across IDDQ (μA), Leakage (μA), and
-                                        Propagation Delay (ns).
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Charts Row 2: 168h Forecast & Feature Importance -->
-                        <div class="grid-2">
 
                             <!-- Chart 3: 168h Forecast Comparison -->
                             <div class="card">
@@ -562,27 +542,6 @@
                                         style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
                                         Green bar: Measured IDDQ. Striped bar: Model predicted 168h degradation target.
                                     </div>
-                                </div>
-                            </div>
-
-                            <!-- Chart 4 & Section 10: Feature Importance / Degradation Drivers -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <span class="card-title">
-                                        <span>🔍</span> Section 10 — What is Driving the Degradation?
-                                    </span>
-                                    <span class="badge badge-neutral">Model Feature Weights</span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-container">
-                                        <canvas id="chart-importance-canvas"></canvas>
-                                    </div>
-                                    <p
-                                        style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
-                                        <strong>Statistical note:</strong> Parameters with highest Gini split importance
-                                        in the trained model.
-                                        Describes model feature influence, not physical causation.
-                                    </p>
                                 </div>
                             </div>
 

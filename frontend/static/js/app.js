@@ -21,13 +21,9 @@ const state = {
     activeFilter: 'all',
     currentMeasurements: null,
     currentPrediction: null,
-    activeChartParam: 'iddq',
     currentStageView: 'dual', // '24h', '96h', or 'dual'
     charts: {
-        progression: null,
-        delta: null,
         forecast: null,
-        importance: null,
         donut: null
     }
 };
@@ -138,15 +134,6 @@ function initControls() {
     if (btnFull) {
         btnFull.addEventListener('click', () => runStageView('dual'));
     }
-
-    // Progression Chart Parameter Switchers
-    const btnIddq = document.getElementById('btn-chart-param-iddq');
-    const btnLeak = document.getElementById('btn-chart-param-leak');
-    const btnDelay = document.getElementById('btn-chart-param-delay');
-
-    if (btnIddq) btnIddq.addEventListener('click', () => setProgressionChartParam('iddq'));
-    if (btnLeak) btnLeak.addEventListener('click', () => setProgressionChartParam('leakage'));
-    if (btnDelay) btnDelay.addEventListener('click', () => setProgressionChartParam('delay'));
 }
 
 // -----------------------------------------------------------------------------
@@ -349,11 +336,9 @@ function runStageView(stage) {
     // Update Module Comparison Cards
     renderModuleCards(pred, stage);
 
-    // Render Charts
-    renderProgressionChart(meas, state.activeChartParam);
-    renderDeltaChart(meas);
+    // Render Primary Analysis Section: Sensor Table & Chart 3 Forecast
+    renderSensorTrajectoryTable(meas, pred, stage);
     renderForecastChart(meas, pred);
-    renderImportanceChart(pred, stage);
 }
 
 function updateStepper(stage) {
@@ -662,164 +647,159 @@ function renderModuleCards(pred, stage) {
 }
 
 // -----------------------------------------------------------------------------
-// Chart 1: Parameter Progression Line Chart
+// Sensor Readings Trajectory Table (Replacing Charts 1 & 2)
 // -----------------------------------------------------------------------------
-function setProgressionChartParam(paramKey) {
-    state.activeChartParam = paramKey;
-    ['iddq', 'leak', 'delay'].forEach(p => {
-        const b = document.getElementById(`btn-chart-param-${p}`);
-        if (b) {
-            if ((p === 'leak' && paramKey === 'leakage') || p === paramKey) {
-                b.classList.remove('btn-secondary');
-                b.classList.add('btn-primary');
-            } else {
-                b.classList.remove('btn-primary');
-                b.classList.add('btn-secondary');
-            }
-        }
-    });
-    renderProgressionChart(state.currentMeasurements, paramKey);
-}
+function renderSensorTrajectoryTable(meas, pred, stage) {
+    const tbody = document.getElementById('sensor-trajectory-tbody');
+    if (!tbody || !meas) return;
 
-function renderProgressionChart(meas, paramKey = 'iddq') {
-    const ctx = document.getElementById('chart-progression-canvas')?.getContext('2d');
-    if (!ctx || !meas) return;
+    tbody.innerHTML = '';
 
-    let colSuffix = '_uA';
-    let unit = 'μA';
-    let label = 'IDDQ';
-    let baseProp = 'iddq_uA';
+    const m0 = meas.measurements_0h || {};
+    const m24 = meas.measurements_24h || {};
+    const m96 = meas.measurements_96h || {};
+    const m168 = meas.measurements_168h || {};
 
-    if (paramKey === 'leakage') {
-        label = 'Leakage Current';
-        unit = 'μA';
-        baseProp = 'leakage_current_uA';
-    } else if (paramKey === 'delay') {
-        label = 'Propagation Delay';
-        unit = 'ns';
-        baseProp = 'propagation_delay_ns';
+    const iddq0 = m0.iddq_uA_0h;
+
+    const fmt = (v, unit) => (v !== null && v !== undefined) ? `${Number(v).toFixed(2)} ${unit}` : '—';
+    const fmtCond = (t, v) => (t !== null && t !== undefined && v !== null && v !== undefined)
+        ? `${Number(t).toFixed(1)}°C · ${Number(v).toFixed(2)}V`
+        : '—';
+
+    const getDeltaPill = (val, baseVal) => {
+        if (val === null || val === undefined || baseVal === null || baseVal === undefined) return '';
+        const diff = val - baseVal;
+        const sign = diff >= 0 ? '+' : '';
+        const pct = (diff / Math.abs(baseVal)) * 100.0;
+        const isWarning = Math.abs(diff) > 4.0 || Math.abs(pct) > 5.0;
+        const pillClass = isWarning ? 'positive' : 'nominal';
+        return `<span class="delta-pill ${pillClass}" style="margin-left: 0.35rem; font-size: 0.7rem; padding: 0.1rem 0.35rem;">${sign}${diff.toFixed(2)}</span>`;
+    };
+
+    // Stage 0h: Baseline
+    const cond0 = fmtCond(m0.temperature_C_0h, m0.voltage_V_0h);
+    const row0 = document.createElement('tr');
+    row0.innerHTML = `
+        <td>
+            <strong>0h Baseline</strong>
+            <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">Pre-Burn-In Screen</span>
+        </td>
+        <td class="mono"><strong>${fmt(m0.iddq_uA_0h, 'μA')}</strong></td>
+        <td class="mono">${fmt(m0.leakage_current_uA_0h, 'μA')}</td>
+        <td class="mono">${fmt(m0.propagation_delay_ns_0h, 'ns')}</td>
+        <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">${cond0}</td>
+        <td><span class="badge badge-neutral">Baseline Ref</span></td>
+    `;
+    tbody.appendChild(row0);
+
+    // Stage 24h: Early Gate
+    const cond24 = fmtCond(m24.temperature_C_24h, m24.voltage_V_24h);
+    const delta24Pill = getDeltaPill(m24.iddq_uA_24h, iddq0);
+    const a24 = pred?.gate_24h?.module_a;
+    let badge24 = '<span class="badge badge-pass">NORMAL</span>';
+    if (a24) {
+        badge24 = a24.prediction === 1 
+            ? '<span class="badge badge-reject">ANOMALY</span>' 
+            : '<span class="badge badge-pass">NORMAL</span>';
     }
 
-    const v0 = meas.measurements_0h?.[`${baseProp}_0h`];
-    const v24 = meas.measurements_24h?.[`${baseProp}_24h`];
-    const v96 = meas.measurements_96h?.[`${baseProp}_96h`];
-    const v168 = meas.measurements_168h?.[`${baseProp}_168h`];
+    const row24 = document.createElement('tr');
+    row24.innerHTML = `
+        <td>
+            <strong>24h Early Gate</strong>
+            <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">Triage Checkpoint</span>
+        </td>
+        <td class="mono"><strong>${fmt(m24.iddq_uA_24h, 'μA')}</strong>${delta24Pill}</td>
+        <td class="mono">${fmt(m24.leakage_current_uA_24h, 'μA')}</td>
+        <td class="mono">${fmt(m24.propagation_delay_ns_24h, 'ns')}</td>
+        <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">${cond24}</td>
+        <td>${badge24}</td>
+    `;
+    tbody.appendChild(row24);
 
-    const labels = ['0h Baseline', '24h Early Gate', '96h Mid Gate', '168h Benchmark'];
-    const values = [v0, v24, v96, v168];
-
-    if (state.charts.progression) {
-        state.charts.progression.destroy();
-    }
-
-    state.charts.progression = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: `${label} (${unit})`,
-                data: values,
-                borderColor: '#2563eb',
-                backgroundColor: 'rgba(37, 99, 235, 0.08)',
-                borderWidth: 2.5,
-                pointBackgroundColor: '#0f172a',
-                pointRadius: 4.5,
-                pointHoverRadius: 6,
-                fill: true,
-                tension: 0.15
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'top', labels: { font: { size: 11, family: '-apple-system, BlinkMacSystemFont, sans-serif' } } },
-                tooltip: {
-                    callbacks: {
-                        label: (c) => `${c.dataset.label}: ${c.raw !== null ? c.raw.toFixed(2) : 'N/A'}`
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    grid: { color: '#f1f5f9' },
-                    ticks: { font: { family: 'ui-monospace, monospace', size: 11 } },
-                    title: { display: true, text: `${label} (${unit})`, font: { size: 11 } }
-                },
-                x: {
-                    grid: { display: false },
-                    ticks: { font: { size: 11 } }
-                }
-            }
+    // Stage 96h: Mid Gate
+    const row96 = document.createElement('tr');
+    if (stage === '24h') {
+        row96.innerHTML = `
+            <td style="opacity: 0.6;">
+                <strong>96h Mid Gate</strong>
+                <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">Qualification Check</span>
+            </td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td><span class="badge badge-neutral" style="opacity: 0.65;">Gated (24h)</span></td>
+        `;
+    } else {
+        const cond96 = fmtCond(m96.temperature_C_96h, m96.voltage_V_96h);
+        const delta96Pill = getDeltaPill(m96.iddq_uA_96h, iddq0);
+        const a96 = pred?.gate_96h?.module_a;
+        let badge96 = '<span class="badge badge-pass">QUALIFIED</span>';
+        if (a96) {
+            badge96 = a96.prediction === 1 
+                ? '<span class="badge badge-reject">DEFECT</span>' 
+                : '<span class="badge badge-pass">QUALIFIED</span>';
         }
-    });
-}
 
-// -----------------------------------------------------------------------------
-// Chart 2: Parameter Physical Shift Bar Chart
-// -----------------------------------------------------------------------------
-function renderDeltaChart(meas) {
-    const ctx = document.getElementById('chart-delta-canvas')?.getContext('2d');
-    if (!ctx || !meas) return;
-
-    const iddq0 = meas.measurements_0h?.iddq_uA_0h;
-    const iddq96 = meas.measurements_96h?.iddq_uA_96h;
-    const deltaIddq = (iddq0 && iddq96) ? Number((iddq96 - iddq0).toFixed(2)) : 0;
-
-    const leak0 = meas.measurements_0h?.leakage_current_uA_0h;
-    const leak96 = meas.measurements_96h?.leakage_current_uA_96h;
-    const deltaLeak = (leak0 && leak96) ? Number((leak96 - leak0).toFixed(2)) : 0;
-
-    const delay0 = meas.measurements_0h?.propagation_delay_ns_0h;
-    const delay96 = meas.measurements_96h?.propagation_delay_ns_96h;
-    const deltaDelay = (delay0 && delay96) ? Number((delay96 - delay0).toFixed(2)) : 0;
-
-    if (state.charts.delta) {
-        state.charts.delta.destroy();
+        row96.innerHTML = `
+            <td>
+                <strong>96h Mid Gate</strong>
+                <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">Qualification Check</span>
+            </td>
+            <td class="mono"><strong>${fmt(m96.iddq_uA_96h, 'μA')}</strong>${delta96Pill}</td>
+            <td class="mono">${fmt(m96.leakage_current_uA_96h, 'μA')}</td>
+            <td class="mono">${fmt(m96.propagation_delay_ns_96h, 'ns')}</td>
+            <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">${cond96}</td>
+            <td>${badge96}</td>
+        `;
     }
+    tbody.appendChild(row96);
 
-    state.charts.delta = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['IDDQ Shift (μA)', 'Leakage Shift (μA)', 'Delay Shift (ns)'],
-            datasets: [{
-                label: 'Actual Physical Change (0h → 96h)',
-                data: [deltaIddq, deltaLeak, deltaDelay],
-                backgroundColor: [
-                    deltaIddq > 4.0 ? 'rgba(220, 38, 38, 0.7)' : 'rgba(37, 99, 235, 0.7)',
-                    'rgba(14, 165, 233, 0.7)',
-                    'rgba(16, 185, 129, 0.7)'
-                ],
-                borderColor: [
-                    deltaIddq > 4.0 ? '#dc2626' : '#2563eb',
-                    '#0ea5e9',
-                    '#10b981'
-                ],
-                borderWidth: 1.5,
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: (c) => `Physical Shift: ${c.raw >= 0 ? '+' : ''}${c.raw}`
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    grid: { color: '#f1f5f9' },
-                    ticks: { font: { family: 'ui-monospace, monospace' } },
-                    title: { display: true, text: 'Absolute Physical Delta', font: { size: 11 } }
-                },
-                x: { grid: { display: false } }
-            }
+    // Stage 168h: Benchmark Ground Truth
+    const row168 = document.createElement('tr');
+    if (stage === '24h') {
+        row168.innerHTML = `
+            <td style="opacity: 0.6;">
+                <strong>168h Benchmark</strong>
+                <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">End-of-Test Truth</span>
+            </td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td class="mono" style="color: var(--text-muted);">—</td>
+            <td><span class="badge badge-neutral" style="opacity: 0.65;">Gated (24h)</span></td>
+        `;
+    } else {
+        const iddq168 = m168.iddq_uA_168h;
+        const cond168 = fmtCond(m168.temperature_C_168h, m168.voltage_V_168h);
+        const delta168Pill = getDeltaPill(iddq168, iddq0);
+
+        const has168 = iddq168 !== null && iddq168 !== undefined;
+        const bMod = pred?.gate_96h?.module_b || pred?.gate_24h?.module_b;
+        let predHint = '';
+        if (iddq0 && bMod?.predicted_iddq_drift_168h !== undefined) {
+            const predVal = (iddq0 * (1 + bMod.predicted_iddq_drift_168h)).toFixed(2);
+            predHint = `<span style="display: block; font-size: 0.68rem; color: #d97706; font-family: var(--font-mono);">AI Pred: ${predVal} μA</span>`;
         }
-    });
+
+        row168.innerHTML = `
+            <td>
+                <strong>168h Benchmark</strong>
+                <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">End-of-Test Truth</span>
+            </td>
+            <td class="mono">
+                ${has168 ? `<strong>${fmt(iddq168, 'μA')}</strong>${delta168Pill}` : '<span style="color: var(--text-muted);">Early Exit (Saved)</span>'}
+                ${predHint}
+            </td>
+            <td class="mono">${has168 ? fmt(m168.leakage_current_uA_168h, 'μA') : '—'}</td>
+            <td class="mono">${has168 ? fmt(m168.propagation_delay_ns_168h, 'ns') : '—'}</td>
+            <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">${has168 ? cond168 : '—'}</td>
+            <td>${has168 ? '<span class="badge badge-pass">VERIFIED</span>' : '<span class="badge badge-neutral">EARLY EXIT</span>'}</td>
+        `;
+    }
+    tbody.appendChild(row168);
 }
 
 // -----------------------------------------------------------------------------
@@ -896,93 +876,6 @@ function renderForecastChart(meas, pred) {
     });
 }
 
-// -----------------------------------------------------------------------------
-// Chart 4: Feature Importance / Degradation Drivers
-// -----------------------------------------------------------------------------
-function renderImportanceChart(pred, stage) {
-    const ctx = document.getElementById('chart-importance-canvas')?.getContext('2d');
-    if (!ctx) return;
-
-    const modA = (stage === '24h') ? pred?.gate_24h?.module_a : (pred?.gate_96h?.module_a ?? pred?.gate_24h?.module_a);
-    let items = modA?.feature_importances || [];
-
-    // Friendly display mappings
-    const nameMap = {
-        'iddq_drift_96h_pct': '96h IDDQ Drift (%)',
-        'iddq_uA_96h': '96h IDDQ Reading (μA)',
-        'iddq_drift_24h_pct': '24h IDDQ Drift (%)',
-        'leakage_drift_96h_pct': '96h Leakage Drift (%)',
-        'iddq_uA_24h': '24h IDDQ Reading (μA)',
-        'delay_drift_96h_pct': '96h Propagation Delay Drift (%)',
-        'leakage_current_uA_96h': '96h Leakage Current (μA)',
-        'temperature_C_96h': '96h Chamber Temperature (°C)',
-        'propagation_delay_ns_96h': '96h Propagation Delay (ns)',
-        'voltage_V_96h': '96h Regulated Voltage (V)'
-    };
-
-    if (items.length === 0) {
-        if (state.charts.importance) {
-            state.charts.importance.destroy();
-            state.charts.importance = null;
-        }
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.font = '12px -apple-system, sans-serif';
-        ctx.fillStyle = '#64748b';
-        ctx.textAlign = 'center';
-        ctx.fillText('Feature importance is not supported by Logistic Regression (24h gate).', ctx.canvas.width / 2, ctx.canvas.height / 2 - 10);
-        ctx.fillText('Switch to 96h Qualification to inspect Random Forest Gini feature weights.', ctx.canvas.width / 2, ctx.canvas.height / 2 + 10);
-        return;
-    }
-
-    const topItems = items.slice(0, 6);
-    const labels = topItems.map(i => nameMap[i.feature] || i.feature);
-    const values = topItems.map(i => i.importance);
-
-    if (state.charts.importance) {
-        state.charts.importance.destroy();
-    }
-
-    state.charts.importance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Gini Feature Importance',
-                data: values,
-                backgroundColor: 'rgba(30, 41, 59, 0.75)',
-                borderColor: '#0f172a',
-                borderWidth: 1,
-                borderRadius: 4
-            }]
-        },
-        options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: (c) => `Relative Importance: ${(c.raw * 100).toFixed(1)}%`
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { color: '#f1f5f9' },
-                    ticks: {
-                        callback: (v) => `${(v * 100).toFixed(0)}%`
-                    },
-                    title: { display: true, text: 'Normalized Feature Weight', font: { size: 10 } }
-                },
-                y: {
-                    grid: { display: false },
-                    ticks: { font: { size: 10 } }
-                }
-            }
-        }
-    });
-}
 
 // -----------------------------------------------------------------------------
 // Section 12: Dataset Overview & Donut Chart

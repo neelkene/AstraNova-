@@ -585,8 +585,8 @@ def test_frontend_index_serves_successfully(client: TestClient):
     assert resp.status_code == 200
     html = resp.text
     assert "AI-Driven Burn-In Screening" in html
-    assert "SIH 2026" in html
-    assert "chart-progression-canvas" in html
+    assert "chart-forecast-canvas" in html
+    assert "sensor-trajectory-table" in html
 
 
 def test_frontend_static_assets_serve_successfully(client: TestClient):
