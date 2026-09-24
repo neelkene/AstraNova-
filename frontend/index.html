@@ -540,16 +540,16 @@
             <section id="view-dataset" class="view-panel">
 
                 <div class="section-header">
-                    <h2 class="section-title"><span>📊</span> Dataset Overview & Ground Truth Distribution</h2>
-                    <p class="section-desc">Authentic distribution of 10,000 components across normal, latent drifting,
-                        and gross anomalous populations.</p>
+                    <h2 class="section-title"><span>📊</span> Dataset Overview &amp; Component Distribution</h2>
+                    <p class="section-desc">Project-specific synthetic burn-in dataset &mdash; 10,000 components across normal, latent drifting,
+                        and gross anomalous populations, structured across four burn-in time gates.</p>
                 </div>
 
                 <div class="grid-4" style="margin-bottom: 1.25rem;">
                     <div class="stat-card">
                         <div class="stat-label">Total Components</div>
                         <div class="stat-value" id="overview-total-val">10,000</div>
-                        <div class="stat-subtext">Ground-truth population</div>
+                        <div class="stat-subtext">Project-specific synthetic dataset</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-label">Normal (Reliable)</div>
@@ -571,6 +571,41 @@
                     </div>
                 </div>
 
+                <!-- Synthetic Data Explanation Card -->
+                <div class="card" style="margin-bottom: 1.25rem; border-left: 3px solid var(--status-review);">
+                    <div class="card-body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <span style="font-size: 1.25rem; flex-shrink: 0;">&#128203;</span>
+                            <div>
+                                <strong style="font-size: 0.85rem; color: var(--text-main);">Why Synthetic Data?</strong>
+                                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 0;">
+                                    Public datasets helped us study real manufacturing variation and degradation patterns,
+                                    but they did not directly provide the required 0h&ndash;24h&ndash;96h&ndash;168h
+                                    semiconductor burn-in structure. Therefore, we created a project-specific synthetic
+                                    burn-in dataset based on manufacturing variation and time-dependent degradation
+                                    patterns studied from our research.
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                            <span style="font-size: 1.25rem; flex-shrink: 0;">&#9881;</span>
+                            <div>
+                                <strong style="font-size: 0.85rem; color: var(--text-main);">Structured, Not Random</strong>
+                                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 0;">
+                                    The data is structured, not randomly generated. Normal, drifting and anomalous
+                                    components follow different degradation behaviours across burn-in stages &mdash;
+                                    calibrated to reflect real-world failure physics (IDDQ drift ramps, leakage
+                                    escalation, propagation delay shift) observed in semiconductor burn-in literature.
+                                </p>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); padding: 0.4rem 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                            &#9888;&#65039; <strong>Transparency notice:</strong> This is a project-specific synthetic dataset. It is
+                            not claimed to be real-world production data.
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid-2">
 
                     <!-- Donut Chart of Sub-Populations -->
@@ -584,7 +619,7 @@
                             </div>
                             <div
                                 style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;">
-                                Authentic component distribution in
+                                Project-specific synthetic dataset distribution in
                                 <code>data/ground_truth/component_ground_truth.csv</code>
                             </div>
                         </div>
