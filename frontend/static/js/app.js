@@ -406,7 +406,11 @@ function updateDecisionHero(pred, stage) {
     if (status === 'PASS') {
         title.textContent = 'Parametric Reliability Confirmed';
     } else if (status === 'REVIEW') {
-        title.textContent = 'Marginal / Borderline Signal Detected';
+        // Distinguish drifting-escalated review from borderline review
+        const isDriftingReview = activeDecision.reason && activeDecision.reason.includes('Abnormal degradation trend');
+        title.textContent = isDriftingReview
+            ? 'Abnormal Degradation Trend Detected'
+            : 'Marginal / Borderline Signal Detected';
     } else {
         title.textContent = 'Critical Burn-In Defect Identified';
     }
@@ -699,8 +703,8 @@ function renderSensorTrajectoryTable(meas, pred, stage) {
     const a24 = pred?.gate_24h?.module_a;
     let badge24 = '<span class="badge badge-pass">NORMAL</span>';
     if (a24) {
-        badge24 = a24.prediction === 1 
-            ? '<span class="badge badge-reject">ANOMALY</span>' 
+        badge24 = a24.prediction === 1
+            ? '<span class="badge badge-reject">ANOMALY</span>'
             : '<span class="badge badge-pass">NORMAL</span>';
     }
 
@@ -736,11 +740,14 @@ function renderSensorTrajectoryTable(meas, pred, stage) {
         const cond96 = fmtCond(m96.temperature_C_96h, m96.voltage_V_96h);
         const delta96Pill = getDeltaPill(m96.iddq_uA_96h, iddq0);
         const a96 = pred?.gate_96h?.module_a;
+        const gate96Decision = pred?.gate_96h?.gate_decision?.status; // PASS, REVIEW, REJECT
         let badge96 = '<span class="badge badge-pass">QUALIFIED</span>';
-        if (a96) {
-            badge96 = a96.prediction === 1 
-                ? '<span class="badge badge-reject">DEFECT</span>' 
-                : '<span class="badge badge-pass">QUALIFIED</span>';
+        if (gate96Decision === 'REJECT') {
+            badge96 = '<span class="badge badge-reject">DEFECT</span>';
+        } else if (gate96Decision === 'REVIEW') {
+            badge96 = '<span class="badge badge-review">REVIEW</span>';
+        } else if (a96 && a96.prediction === 1) {
+            badge96 = '<span class="badge badge-review">REVIEW</span>';
         }
 
         row96.innerHTML = `

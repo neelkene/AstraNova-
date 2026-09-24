@@ -711,6 +711,312 @@ body {
     background: rgba(0, 0, 0, 0.05);
 }
 
+.decision-kicker {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.decision-mode-pill {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: var(--bg-surface-subtle);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* ==============================================================================
+   Static Limits vs. AI Dynamic Screening Comparison Styling
+   ============================================================================== */
+.screening-comparison-card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.screening-comparison-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.screening-comp-header {
+    background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-surface-subtle) 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.85rem 1.25rem;
+}
+
+/* Progression Flow Banner */
+.progression-flow-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-surface-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 1.15rem;
+    flex-wrap: wrap;
+}
+
+.progression-flow-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.progression-steps {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.prog-step {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.78rem;
+    border-radius: 999px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+.prog-step strong {
+    margin-left: 0.35rem;
+    letter-spacing: 0.02em;
+}
+
+.prog-step.prog-step-pass {
+    background: var(--status-pass-bg);
+    border-color: var(--status-pass-border);
+    color: #065f46;
+}
+
+.prog-step.prog-step-review {
+    background: var(--status-review-bg);
+    border-color: var(--status-review-border);
+    color: #92400e;
+}
+
+.prog-step.prog-step-reject {
+    background: var(--status-reject-bg);
+    border-color: var(--status-reject-border);
+    color: #991b1b;
+}
+
+.prog-step.prog-step-forecast {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #b45309;
+}
+
+.prog-arrow {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+/* 3 Decision Checks Grid */
+.decision-checks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 960px) {
+    .decision-checks-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.decision-check-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.decision-check-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+.decision-check-card.pass {
+    border-color: var(--status-pass-border);
+    background: linear-gradient(180deg, var(--bg-surface) 0%, rgba(236, 253, 245, 0.3) 100%);
+}
+.decision-check-card.pass::before {
+    background: var(--status-pass);
+}
+
+.decision-check-card.review {
+    border-color: var(--status-review-border);
+    background: linear-gradient(180deg, var(--bg-surface) 0%, rgba(255, 251, 235, 0.45) 100%);
+}
+.decision-check-card.review::before {
+    background: var(--status-review);
+}
+
+.decision-check-card.reject {
+    border-color: var(--status-reject-border);
+    background: linear-gradient(180deg, var(--bg-surface) 0%, rgba(254, 242, 242, 0.45) 100%);
+}
+.decision-check-card.reject::before {
+    background: var(--status-reject);
+}
+
+.check-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.check-card-name {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.check-pill {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+}
+
+.check-headline {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.35;
+}
+
+.check-metrics-box {
+    background: var(--bg-surface-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.check-metric-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.73rem;
+}
+
+.check-metric-lbl {
+    color: var(--text-muted);
+}
+
+.check-metric-val {
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.check-metric-val.mono {
+    font-family: var(--font-mono);
+}
+
+.check-detail-text {
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    flex-grow: 1;
+}
+
+.check-insight-tag {
+    font-size: 0.69rem;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.03);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Callout Banners Grid */
+.screening-callouts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .screening-callouts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.callout-card {
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.1rem;
+    border: 1px solid transparent;
+}
+
+.callout-why-matters {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e3a8a;
+}
+
+.callout-recommendation {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.callout-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+}
+
+.callout-why-matters .callout-title-row {
+    color: #1d4ed8;
+}
+
+.callout-recommendation .callout-title-row {
+    color: #b45309;
+}
+
+.callout-content-quote {
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
 /* KPI Stat Cards */
 .stat-card {
     background: var(--bg-surface);

@@ -110,16 +110,37 @@ def make_screening_decision(
             
     else:
         # 96h Gate Decision Logic
-        if defect_probability >= cfg.prob_reject_96h or predicted_168h_drift >= cfg.drift_reject_96h:
+        # --- Severe/Anomalous: high defect probability AND/OR extreme drift (>= 20%) -> REJECT
+        is_anomalous_severity = (
+            defect_probability >= cfg.prob_reject_96h and predicted_168h_drift >= 0.20
+        )
+        # --- Drifting (marginal latent defect): exceeds drift threshold (>= 5%) but in drifting range (< 20%)
+        is_drifting_range = (
+            (defect_probability >= cfg.prob_reject_96h or predicted_168h_drift >= cfg.drift_reject_96h)
+            and not is_anomalous_severity
+        )
+
+        if is_anomalous_severity:
             decision = "REJECT"
             confidence = "HIGH"
             reason = (
-                f"Defect confirmed at 96h qualification gate: Defect Probability = {defect_probability*100:.1f}% "
-                f"(Threshold: {cfg.prob_reject_96h*100:.1f}%) or Projected 168h Drift = {drift_pct:.2f}% "
-                f"(Exceeds maximum allowable tolerance of {cfg.drift_reject_96h*100:.1f}%)."
+                f"Gross defect confirmed at 96h qualification gate: Defect Probability = {defect_probability*100:.1f}% "
+                f"(Threshold: {cfg.prob_reject_96h*100:.1f}%) and Projected 168h Drift = {drift_pct:.2f}% "
+                f"(Exceeds anomalous tolerance of 20.0%). Severe parametric failure detected."
             )
-            recommendation = "Reject and scrap component. Fails 96h burn-in qualification standard."
-            
+            recommendation = "Remove component from production line immediately. Fails 96h burn-in qualification standard."
+
+        elif is_drifting_range:
+            decision = "REVIEW"
+            confidence = "MEDIUM"
+            reason = (
+                f"Abnormal degradation trend detected at 96h gate: Defect Probability = {defect_probability*100:.1f}% "
+                f"and Projected 168h Drift = {drift_pct:.2f}% "
+                f"(Exceeds {cfg.drift_reject_96h*100:.1f}% threshold — consistent with latent drifting defect). "
+                f"Marginal component requires engineering review before disposition."
+            )
+            recommendation = "Escalate for manual engineering review. Do not release to production without secondary verification."
+
         elif defect_probability < cfg.prob_pass_96h and predicted_168h_drift < cfg.drift_pass_96h:
             decision = "PASS"
             confidence = "HIGH"
@@ -129,7 +150,7 @@ def make_screening_decision(
                 f"(< {cfg.drift_pass_96h*100:.1f}%). Component meets high-reliability standards."
             )
             recommendation = "Pass component and release to production inventory."
-            
+
         else:
             decision = "REVIEW"
             confidence = "LOW"
