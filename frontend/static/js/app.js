@@ -490,10 +490,10 @@ function updateStatCards(pred, meas, stage) {
 
     if (stage === '24h') {
         statChamber.textContent = '144 Hours';
-        statChamberSub.textContent = 'Early triage at 24h gate vs 168h standard';
+        statChamberSub.textContent = 'Burn-in hours saved vs full 168h run (early triage at 24h)';
     } else {
         statChamber.textContent = '72 Hours';
-        statChamberSub.textContent = 'Qualified at 96h gate vs 168h standard';
+        statChamberSub.textContent = 'Burn-in hours saved vs full 168h run (qualified at 96h)';
     }
 }
 
