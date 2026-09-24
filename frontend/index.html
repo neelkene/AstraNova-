@@ -468,61 +468,8 @@
                                     <div
                                         style="font-size: 0.75rem; color: var(--text-muted); background: var(--bg-surface-subtle); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);">
                                         🎯 <strong>Forecast Calibration:</strong> The models predict the final
-                                        percentage shift in IDDQ at 168h — forecast generated without waiting for the remaining burn-in duration.
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Section 10: Primary Analysis Section (Sensor Trajectory Table & 168h Degradation Forecast) -->
-                        <div class="grid-2" id="sensor-analysis-section">
-
-                            <!-- Clean Professional Sensor Table Card -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <span class="card-title">
-                                        <span>📋</span> Sensor Readings Trajectory
-                                        <span class="info-tooltip"
-                                            data-tooltip="Telemetry tracking of key physical sensor readings across burn-in stages, reflecting early gate drift and qualification progression.">ℹ️</span>
-                                    </span>
-                                    <span class="badge badge-blue">Hardware Telemetry</span>
-                                </div>
-                                <div class="card-body" style="padding: 0;">
-                                    <div style="overflow-x: auto;">
-                                        <table class="measurements-table" id="sensor-trajectory-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Burn-In Stage</th>
-                                                    <th>IDDQ (μA)</th>
-                                                    <th>Leakage (μA)</th>
-                                                    <th>Delay (ns)</th>
-                                                    <th>Chamber Cond.</th>
-                                                    <th>Gate Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="sensor-trajectory-tbody">
-                                                <!-- Populated dynamically via app.js -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Chart 3: 168h Forecast Comparison -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <span class="card-title">
-                                        <span>🎯</span> Chart 3 — 168h Degradation Forecast (Measured vs Predicted)
-                                    </span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="chart-container">
-                                        <canvas id="chart-forecast-canvas"></canvas>
-                                    </div>
-                                    <div
-                                        style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center;">
-                                        Green bar: Measured IDDQ. Striped bar: Model predicted 168h degradation target.
+                                        percentage shift in IDDQ at 168h — forecast generated without waiting for the
+                                        remaining burn-in duration.
                                     </div>
                                 </div>
                             </div>
@@ -530,6 +477,63 @@
                         </div>
 
                     </div>
+                    <!-- /dashboard-main-column -->
+                </div>
+                <!-- /grid-sidebar -->
+
+                <!-- Section 10: Full-Width Analysis Section (Sensor Trajectory Table & 168h Degradation Forecast) -->
+                <div class="grid-2" id="sensor-analysis-section">
+
+                    <!-- Clean Professional Sensor Table Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">
+                                <span>📋</span> Sensor Readings Trajectory
+                                <span class="info-tooltip"
+                                    data-tooltip="Telemetry tracking of key physical sensor readings across burn-in stages, reflecting early gate drift and qualification progression.">ℹ️</span>
+                            </span>
+                            <span class="badge badge-blue">Hardware Telemetry</span>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <div style="overflow-x: auto;">
+                                <table class="measurements-table" id="sensor-trajectory-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Burn-In Stage</th>
+                                            <th>IDDQ (μA)</th>
+                                            <th>Leakage (μA)</th>
+                                            <th>Delay (ns)</th>
+                                            <th>Chamber Cond.</th>
+                                            <th>Gate Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sensor-trajectory-tbody">
+                                        <!-- Populated dynamically via app.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart 3: 168h Forecast Comparison -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">
+                                <span>🎯</span> Chart 3 — 168h Degradation Forecast (Measured vs Predicted)
+                            </span>
+                            <span class="badge badge-neutral">168h Horizon</span>
+                        </div>
+                        <div class="card-body" style="display: flex; flex-direction: column;">
+                            <div class="chart-container" style="flex: 1; min-height: 220px;">
+                                <canvas id="chart-forecast-canvas"></canvas>
+                            </div>
+                            <div
+                                style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; text-align: center;">
+                                Green bar: Measured IDDQ. Striped bar: Model predicted 168h degradation target.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </section>
@@ -541,7 +545,8 @@
 
                 <div class="section-header">
                     <h2 class="section-title"><span>📊</span> Dataset Overview &amp; Component Distribution</h2>
-                    <p class="section-desc">Project-specific synthetic burn-in dataset &mdash; 10,000 components across normal, latent drifting,
+                    <p class="section-desc">Project-specific synthetic burn-in dataset &mdash; 10,000 components across
+                        normal, latent drifting,
                         and gross anomalous populations, structured across four burn-in time gates.</p>
                 </div>
 
@@ -577,9 +582,12 @@
                         <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
                             <span style="font-size: 1.25rem; flex-shrink: 0;">&#128203;</span>
                             <div>
-                                <strong style="font-size: 0.85rem; color: var(--text-main);">Why Synthetic Data?</strong>
-                                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 0;">
-                                    Public datasets helped us study real manufacturing variation and degradation patterns,
+                                <strong style="font-size: 0.85rem; color: var(--text-main);">Why Synthetic
+                                    Data?</strong>
+                                <p
+                                    style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 0;">
+                                    Public datasets helped us study real manufacturing variation and degradation
+                                    patterns,
                                     but they did not directly provide the required 0h&ndash;24h&ndash;96h&ndash;168h
                                     semiconductor burn-in structure. Therefore, we created a project-specific synthetic
                                     burn-in dataset based on manufacturing variation and time-dependent degradation
@@ -590,8 +598,10 @@
                         <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
                             <span style="font-size: 1.25rem; flex-shrink: 0;">&#9881;</span>
                             <div>
-                                <strong style="font-size: 0.85rem; color: var(--text-main);">Structured, Not Random</strong>
-                                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 0;">
+                                <strong style="font-size: 0.85rem; color: var(--text-main);">Structured, Not
+                                    Random</strong>
+                                <p
+                                    style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; margin-bottom: 0;">
                                     The data is structured, not randomly generated. Normal, drifting and anomalous
                                     components follow different degradation behaviours across burn-in stages &mdash;
                                     calibrated to reflect real-world failure physics (IDDQ drift ramps, leakage
@@ -599,8 +609,10 @@
                                 </p>
                             </div>
                         </div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); padding: 0.4rem 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
-                            &#9888;&#65039; <strong>Transparency notice:</strong> This is a project-specific synthetic dataset. It is
+                        <div
+                            style="font-size: 0.72rem; color: var(--text-muted); padding: 0.4rem 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm);">
+                            &#9888;&#65039; <strong>Transparency notice:</strong> This is a project-specific synthetic
+                            dataset. It is
                             not claimed to be real-world production data.
                         </div>
                     </div>
@@ -831,5 +843,7 @@
     <!-- Application Script -->
     <script src="/static/js/app.js"></script>
 </body>
+
+</html>
 
 </html>
